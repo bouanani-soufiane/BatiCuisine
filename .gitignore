@@ -37,3 +37,4 @@ distributions/
 
 # Ignore Maven repository
 .mvn/
+.env
