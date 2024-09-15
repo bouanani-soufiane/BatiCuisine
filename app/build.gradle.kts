@@ -15,12 +15,13 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
     // Use JUnit test framework.
     testImplementation(libs.junit)
-
-    // This dependency is used by the application.
     implementation(libs.guava)
+    implementation("org.postgresql:postgresql:42.7.4")
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
