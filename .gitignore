@@ -1,5 +1,39 @@
 # Ignore Gradle project-specific cache directory
-.gradle
+.gradle/
 
 # Ignore Gradle build output directory
-build
+build/
+
+# Ignore Gradle wrapper jar and properties
+gradle/wrapper/gradle-wrapper.jar
+gradle/wrapper/gradle-wrapper.properties
+
+# Ignore compiled Java classes
+*.class
+
+# Ignore JAR files
+*.jar
+
+# Ignore IDE-specific files and directories
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore any generated files
+*.log
+*.tmp
+
+# Ignore test results and reports
+test-results/
+reports/
+
+# Ignore distribution archives
+distributions/
+
+# Ignore Maven repository
+.mvn/
