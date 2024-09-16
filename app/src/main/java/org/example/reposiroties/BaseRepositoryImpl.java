@@ -72,5 +72,19 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
         }
     }
 
+    @Override
+
+    public Boolean existsByColumn(String columnName, String value){
+        try{
+            String query = "SELECT 1 FROM " + this._tableName + " WHERE "+columnName+" = ?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setObject(1, value);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
