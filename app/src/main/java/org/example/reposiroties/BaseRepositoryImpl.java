@@ -1,16 +1,15 @@
 package org.example.reposiroties;
 
-
 import org.example.config.DatabaseConnection;
 import org.example.mappers.EntityRowMapper;
 import org.example.reposiroties.interfaces.BaseRepository;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository <Entity, ID> {
 
@@ -43,6 +42,21 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
         return entities;
     }
 
+    public Optional<Entity> findById( final ID id){
+        Optional<Entity> entity = Optional.empty();
+        try{
+            String query = "SELECT * FROM " + this._tableName + " WHERE id = ?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setObject(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                entity = Optional.of(entityRowMapper.map(resultSet));
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return entity;
+    }
 
 
 
