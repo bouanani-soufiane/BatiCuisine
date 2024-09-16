@@ -28,7 +28,7 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
     public List<Entity> findAll () {
         List<Entity> entities = new ArrayList<>();
         try {
-            String query = "SELECT * FROM " + this._tableName;
+            final String query = "SELECT * FROM " + this._tableName;
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             ResultSet resultSet = preparedStatement.executeQuery();
 
@@ -48,9 +48,9 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
         AtomicReference<Optional<Entity>> entity = new AtomicReference<>(Optional.empty());
 
         try{
-            String query = "SELECT * FROM " + this._tableName + " WHERE id =  CAST  (? AS UUID) ";
+            final String query = "SELECT * FROM " + this._tableName + " WHERE id =  ?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
-            preparedStatement.setObject(1, id.toString());
+            preparedStatement.setObject(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 entity.set(Optional.of(entityRowMapper.map(resultSet)));
@@ -64,7 +64,7 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
     public Optional<Entity> findByColumn(final String column , final String value){
         final AtomicReference<Optional<Entity>> entity = new AtomicReference<>(Optional.empty());
         try {
-            String query = "SELECT * FROM " + this._tableName + " WHERE "+column+" = ?";
+            final String query = "SELECT * FROM " + this._tableName + " WHERE "+column+" = ?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setObject(1, value);
             ResultSet resultSet = preparedStatement.executeQuery();
@@ -81,9 +81,9 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
     @Override
     public boolean existsById(final ID id) {
         try{
-            String query = "SELECT 1 FROM " + this._tableName + " WHERE id =  CAST  (? AS UUID) ";
+            final String query = "SELECT 1 FROM " + this._tableName + " WHERE id =  ?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
-            preparedStatement.setObject(1, id.toString());
+            preparedStatement.setObject(1, id);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
         }catch (SQLException e){
@@ -95,11 +95,26 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
 
     public boolean existsByColumn(final String columnName, final String value){
         try{
-            String query = "SELECT 1 FROM " + this._tableName + " WHERE "+columnName+" = ?";
+            final String query = "SELECT 1 FROM " + this._tableName + " WHERE "+columnName+" = ?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setObject(1, value);
             ResultSet resultSet = preparedStatement.executeQuery();
             return resultSet.next();
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public boolean delete(ID id){
+        try {
+            final String query = "DELETE FROM " + this._tableName + " WHERE id = ?  ";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setObject(1, id);
+            int rowsAffected = preparedStatement.executeUpdate();
+
+            return rowsAffected > 0;
+
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
