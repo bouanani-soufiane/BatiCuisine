@@ -79,7 +79,7 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
     }
 
     @Override
-    public Boolean existsById(final ID id) {
+    public boolean existsById(final ID id) {
         try{
             String query = "SELECT 1 FROM " + this._tableName + " WHERE id =  CAST  (? AS UUID) ";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
@@ -93,7 +93,7 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
 
     @Override
 
-    public Boolean existsByColumn(final String columnName, final String value){
+    public boolean existsByColumn(final String columnName, final String value){
         try{
             String query = "SELECT 1 FROM " + this._tableName + " WHERE "+columnName+" = ?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
