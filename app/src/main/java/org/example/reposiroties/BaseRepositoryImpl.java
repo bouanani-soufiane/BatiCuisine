@@ -42,6 +42,7 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
         return entities;
     }
 
+    @Override
     public Optional<Entity> findById( final ID id){
         Optional<Entity> entity = Optional.empty();
         try{
@@ -58,7 +59,18 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
         return entity;
     }
 
-
+    @Override
+    public Boolean existsById(final ID id) {
+        try{
+            String query = "SELECT 1 FROM " + this._tableName + " WHERE id =  CAST  (? AS UUID) ";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setObject(1, id.toString());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return resultSet.next();
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+    }
 
 
 }
