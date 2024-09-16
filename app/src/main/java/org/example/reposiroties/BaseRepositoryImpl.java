@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository <Entity, ID> {
 
@@ -44,19 +45,37 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
 
     @Override
     public Optional<Entity> findById( final ID id){
-        Optional<Entity> entity = Optional.empty();
+        AtomicReference<Optional<Entity>> entity = new AtomicReference<>(Optional.empty());
+
         try{
             String query = "SELECT * FROM " + this._tableName + " WHERE id =  CAST  (? AS UUID) ";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
             preparedStatement.setObject(1, id.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
-                entity = Optional.of(entityRowMapper.map(resultSet));
+                entity.set(Optional.of(entityRowMapper.map(resultSet)));
             }
         }catch (SQLException e){
             throw new RuntimeException(e);
         }
-        return entity;
+        return entity.get();
+    }
+
+    public Optional<Entity> findByColumn(final String column , final String value){
+        final AtomicReference<Optional<Entity>> entity = new AtomicReference<>(Optional.empty());
+        try {
+            String query = "SELECT * FROM " + this._tableName + " WHERE "+column+" = ?";
+            PreparedStatement preparedStatement = this.connection.prepareStatement(query);
+            preparedStatement.setObject(1, value);
+            ResultSet resultSet = preparedStatement.executeQuery();
+
+            while (resultSet.next()) {
+                entity.set(Optional.of(entityRowMapper.map(resultSet)));
+            }
+        }catch (SQLException e){
+            throw new RuntimeException(e);
+        }
+        return entity.get();
     }
 
     @Override
@@ -74,7 +93,7 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
 
     @Override
 
-    public Boolean existsByColumn(String columnName, String value){
+    public Boolean existsByColumn(final String columnName, final String value){
         try{
             String query = "SELECT 1 FROM " + this._tableName + " WHERE "+columnName+" = ?";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
