@@ -1,0 +1,24 @@
+package org.example.reposiroties.interfaces;
+
+
+import java.util.List;
+import java.util.Optional;
+
+public interface BaseRepository<Entity, ID> {
+
+    List<Entity> findAll();
+
+    Optional<Entity> findById(ID id);
+
+    Optional<Entity> findByColumn(String columnName, String value);
+
+    Entity create(Entity entity);
+
+    Entity update(ID id, Entity entity);
+
+    void delete(ID id);
+
+    Boolean existsById(ID id);
+
+    Boolean existsByColumn(String columnName, String value);
+}
