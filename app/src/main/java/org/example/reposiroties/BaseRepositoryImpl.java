@@ -45,9 +45,9 @@ public abstract class BaseRepositoryImpl<Entity , ID > implements BaseRepository
     public Optional<Entity> findById( final ID id){
         Optional<Entity> entity = Optional.empty();
         try{
-            String query = "SELECT * FROM " + this._tableName + " WHERE id = ?";
+            String query = "SELECT * FROM " + this._tableName + " WHERE id =  CAST  (? AS UUID) ";
             PreparedStatement preparedStatement = this.connection.prepareStatement(query);
-            preparedStatement.setObject(1, id);
+            preparedStatement.setObject(1, id.toString());
             ResultSet resultSet = preparedStatement.executeQuery();
             while (resultSet.next()) {
                 entity = Optional.of(entityRowMapper.map(resultSet));
