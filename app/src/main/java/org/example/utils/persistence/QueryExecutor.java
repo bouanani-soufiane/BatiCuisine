@@ -2,7 +2,6 @@ package org.example.utils.persistence;
 
 import org.example.config.DatabaseConnection;
 import org.example.exceptions.RepositoryException;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -18,6 +17,4 @@ public class QueryExecutor {
             throw new RepositoryException("Error executing query: " + query, e);
         }
     }
-
-
 }
