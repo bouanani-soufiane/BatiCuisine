@@ -1,4 +1,4 @@
-package org.example.mappers;
+package org.example.mappers.rowmapper;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

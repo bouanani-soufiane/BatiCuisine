@@ -1,7 +1,7 @@
 package org.example.reposiroties;
 
 import org.example.config.DatabaseConnection;
-import org.example.mappers.EntityRowMapper;
+import org.example.mappers.rowmapper.EntityRowMapper;
 import org.example.reposiroties.interfaces.BaseRepository;
 
 import java.sql.Connection;
