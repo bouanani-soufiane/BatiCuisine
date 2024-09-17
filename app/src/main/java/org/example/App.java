@@ -5,9 +5,10 @@ package org.example;
 
 import org.example.config.DatabaseConnection;
 
+
 public class App {
 
     public static void main(String[] args) {
-        DatabaseConnection.getConnection();
+
     }
 }

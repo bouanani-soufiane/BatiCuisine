@@ -16,9 +16,9 @@ public interface BaseRepository<Entity, ID> {
 
     Entity update(ID id, Entity entity);
 
-    void delete(ID id);
+    boolean delete(ID id);
 
-    Boolean existsById(ID id);
+    boolean existsById(ID id);
 
-    Boolean existsByColumn(String columnName, String value);
+    boolean existsByColumn(String columnName, String value);
 }

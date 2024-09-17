@@ -1,4 +1,4 @@
-package org.example.config;
+package org.example.utils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
