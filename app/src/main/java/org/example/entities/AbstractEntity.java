@@ -1,14 +1,17 @@
 package org.example.entities;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
-public abstract class AbstractEntity<ID> {
+public abstract class AbstractEntity{
 
     protected LocalDateTime createdAt;
     protected LocalDateTime updatedAt;
     protected LocalDateTime deletedAt;
 
-    public abstract ID getId();
+    public abstract UUID id();
+
+
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
