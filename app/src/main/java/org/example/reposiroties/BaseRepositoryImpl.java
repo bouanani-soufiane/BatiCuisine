@@ -27,6 +27,7 @@ public abstract class BaseRepositoryImpl<Entity, ID> implements BaseRepository<E
     @Override
     public List<Entity> findAll () {
         final String query = "SELECT * FROM " + this._tableName;
+
         return executeQuery(query, stmt -> {
             List<Entity> entities = new ArrayList<>();
             try (ResultSet resultSet = stmt.executeQuery()) {

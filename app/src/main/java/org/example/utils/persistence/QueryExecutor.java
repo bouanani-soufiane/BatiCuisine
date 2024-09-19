@@ -10,7 +10,7 @@ public class QueryExecutor {
 
     private final static Connection connection = DatabaseConnection.getConnection();
 
-    public static  <T> T executeQuery(final String query, QueryHandler<T> handler) {
+    public static  <T> T executeQuery(final String query, QueryHandler<T> handler) throws RuntimeException {
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             return handler.handle(preparedStatement);
         } catch (SQLException e) {
