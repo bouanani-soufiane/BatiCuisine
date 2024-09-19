@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 import java.util.UUID;
 import java.util.function.Predicate;
+import java.util.logging.SimpleFormatter;
 import java.util.stream.IntStream;
 
 public class ValidatedInputReader {
@@ -25,6 +26,7 @@ public class ValidatedInputReader {
             }
         }
     }
+
 
     public static Integer scanInt(String prompt, Predicate<Integer> validator) {
         return scanWithValidation(prompt, Integer::parseInt, validator);

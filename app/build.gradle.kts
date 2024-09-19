@@ -21,6 +21,8 @@ dependencies {
     testImplementation(libs.junit)
     implementation(libs.guava)
     implementation("org.postgresql:postgresql:42.7.4")
+    implementation("com.github.freva:ascii-table:1.8.0")
+
 
 }
 

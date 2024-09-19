@@ -9,15 +9,15 @@ public class Workforce extends Component{
     private Double workingHours;
     private Double productivityFactor;
 
-    public Workforce ( String name, ComponentType componentType, Project project , Double pricePerHour, Double workingHours, Double productivityFactor ) {
-        super(name, componentType, project);
+    public Workforce ( String name, ComponentType componentType, Project project , Double tva, Double pricePerHour, Double workingHours, Double productivityFactor ) {
+        super(name, componentType, project , tva);
         this.pricePerHour = pricePerHour;
         this.workingHours = workingHours;
         this.productivityFactor = productivityFactor;
     }
 
-    public Workforce ( String name, ComponentType componentType, Project project , Double pricePerHour, Double workingHours, Double productivityFactor, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt ) {
-        super(name, componentType, project,createdAt, updatedAt, deletedAt);
+    public Workforce ( String name, ComponentType componentType, Project project , Double tva , Double pricePerHour, Double workingHours, Double productivityFactor, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt ) {
+        super(name, componentType, project, tva,createdAt, updatedAt, deletedAt);
         this.pricePerHour = pricePerHour;
         this.workingHours = workingHours;
         this.productivityFactor = productivityFactor;

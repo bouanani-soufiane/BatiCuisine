@@ -13,7 +13,7 @@ public abstract class AbstractEntity{
 
 
 
-    public LocalDateTime getCreatedAt() {
+    public LocalDateTime createdAt() {
         return createdAt;
     }
 
@@ -22,7 +22,7 @@ public abstract class AbstractEntity{
         return this;
     }
 
-    public LocalDateTime getUpdatedAt() {
+    public LocalDateTime updatedAt() {
         return updatedAt;
     }
 
@@ -31,7 +31,7 @@ public abstract class AbstractEntity{
         return this;
     }
 
-    public LocalDateTime getDeletedAt() {
+    public LocalDateTime deletedAt() {
         return deletedAt;
     }
 

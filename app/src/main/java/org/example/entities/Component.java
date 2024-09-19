@@ -9,19 +9,21 @@ public abstract class Component  extends AbstractEntity{
     private UUID id;
     private String name;
     private ComponentType componentType;
+    private Double tva;
     private Project project;
 
     public Component (){
 
     }
 
-    public Component ( String name, ComponentType componentType, Project project ) {
+    public Component ( String name, ComponentType componentType, Project project, Double tva ) {
         this.name = name;
         this.componentType = componentType;
+        this.tva = tva ;
         this.project = project;
     }
-    public Component ( String name, ComponentType componentType, Project project , LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
-        this(name , componentType, project);
+    public Component ( String name, ComponentType componentType, Project project ,Double tva, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this(name , componentType, project ,tva);
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
@@ -53,6 +55,15 @@ public abstract class Component  extends AbstractEntity{
 
     public Component setComponentType ( ComponentType componentType ) {
         this.componentType = componentType;
+        return this;
+    }
+
+    public Double tva () {
+        return tva;
+    }
+
+    public Component setTva ( Double tva ) {
+        this.tva = tva;
         return this;
     }
 
