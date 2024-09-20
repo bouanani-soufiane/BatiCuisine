@@ -15,6 +15,14 @@ public class Client extends AbstractEntity{
     public Client() {
     }
 
+    public Client ( UUID id, String name, String address, String phone, Boolean isProfessional, List<Project> projects ) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.phone = phone;
+        this.isProfessional = isProfessional;
+        this.projects = projects;
+    }
     public Client ( String name, String address, String phone, Boolean isProfessional, List<Project> projects ) {
         this.name = name;
         this.address = address;

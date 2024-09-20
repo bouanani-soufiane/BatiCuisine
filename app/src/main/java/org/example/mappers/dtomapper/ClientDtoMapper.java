@@ -4,7 +4,9 @@ import org.example.dtos.requests.ClientRequest;
 import org.example.dtos.responses.ClientResponse;
 import org.example.entities.Client;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 public class ClientDtoMapper implements EntityDtoMapper<Client, ClientRequest, ClientResponse> {
     @Override
@@ -15,5 +17,10 @@ public class ClientDtoMapper implements EntityDtoMapper<Client, ClientRequest, C
     @Override
     public ClientResponse mapToDto ( Client client ) {
         return new ClientResponse(client.id(), client.name(), client.address(), client.phone(), client.isProfessional(), client.createdAt(), client.updatedAt());
+    }
+
+    public Client mapToEntity ( ClientResponse dto ) {
+        return new Client(dto.id() , dto.name(), dto.address(), dto.phone(), dto.isProfessional(), List.of());
+
     }
 }

@@ -54,16 +54,18 @@ public abstract class BaseRepositoryImpl<Entity, ID> implements BaseRepository<E
         });
     }
 
-    public Optional<Entity> findByColumn ( String column, String value ) {
+    public Optional<List<Entity>> findByColumn ( String column, String value ) {
         String query = "SELECT * FROM " + _tableName + " WHERE " + column + " = ?";
         return executeQuery(query, stmt -> {
             stmt.setObject(1, value);
+            List<Entity> entities = new ArrayList<>();
             try (ResultSet resultSet = stmt.executeQuery()) {
-                if (resultSet.next()) {
-                    return Optional.of(entityRowMapper.map(resultSet));
+                while (resultSet.next()) {
+                    entities.add(entityRowMapper.map(resultSet));
                 }
-                return Optional.empty();
             }
+            return entities.isEmpty() ? Optional.empty() : Optional.of(entities);
+
         });
     }
 

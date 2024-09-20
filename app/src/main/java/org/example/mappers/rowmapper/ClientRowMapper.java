@@ -12,7 +12,7 @@ public class ClientRowMapper implements EntityRowMapper<Client> {
     public Client map ( ResultSet resultSet ) throws SQLException {
         Client client =  new Client();
         client.setId((UUID) resultSet.getObject("id"));
-        client.setName(resultSet.getString("name"));
+        client.setName(resultSet.getString("client_name"));
         client.setAddress(resultSet.getString("address"));
         client.setPhone(resultSet.getString("phone"));
         client.setProfessional(resultSet.getBoolean("is_professional"));

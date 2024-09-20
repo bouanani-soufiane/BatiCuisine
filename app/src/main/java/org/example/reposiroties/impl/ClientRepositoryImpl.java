@@ -7,6 +7,8 @@ import org.example.reposiroties.BaseRepositoryImpl;
 import org.example.reposiroties.interfaces.ClientRepository;
 
 import java.sql.ResultSet;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import static org.example.utils.persistence.QueryExecutor.executeQuery;
 
@@ -18,7 +20,7 @@ public class ClientRepositoryImpl extends BaseRepositoryImpl<Client , UUID> impl
 
     @Override
     public Client create ( Client client ) {
-        final String query = "INSERT INTO clients (name, address, phone, is_professional) VALUES(?,?,?,?) RETURNING *";
+        final String query = "INSERT INTO clients (client_name, address, phone, is_professional) VALUES(?,?,?,?) RETURNING *";
 
         return executeQuery(query, stmt -> {
 
@@ -34,7 +36,7 @@ public class ClientRepositoryImpl extends BaseRepositoryImpl<Client , UUID> impl
     }
     @Override
     public Client update(UUID uuid, Client client) {
-        final String query = "UPDATE clients SET name = ?, address = ?, phone = ?, is_professional = ?, updated_at = now() WHERE id = ? RETURNING *";
+        final String query = "UPDATE clients SET client_name = ?, address = ?, phone = ?, is_professional = ?, updated_at = now() WHERE id = ? RETURNING *";
 
          return executeQuery(query, stmt ->{
              entityRowMapper.map(client,stmt);
@@ -49,9 +51,10 @@ public class ClientRepositoryImpl extends BaseRepositoryImpl<Client , UUID> impl
     }
 
     @Override
-    public Client getByName(String value) throws ClientNotFoundException {
-        return this.findByColumn("name", value)
-                .orElseThrow(() -> new ClientNotFoundException("Client not found"));
+    public Optional<List<Client>> getByName(String value) throws ClientNotFoundException {
+        List<Client> clients = this.findByColumn("client_name", value)
+                .orElseThrow(() -> new ClientNotFoundException("Client with name (" + value + ") was not found"));
+        return Optional.of(clients);
     }
 
 }

@@ -11,6 +11,7 @@ import org.example.services.interfaces.ClientService;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static com.github.freva.asciitable.HorizontalAlign.*;
@@ -46,14 +47,16 @@ public class ClientUI {
         }
     }
 
-    private void findByName () {
+    private Optional<List<ClientResponse>> findByName () {
         secondaryTitle("find client by name");
         final String name = scanString("please enter client name  : ", NOT_BLANK);
         try {
-            ClientResponse clientResponse = service.findByName(name);
-            this.showTable(List.of(clientResponse));
+            Optional<List<ClientResponse>>  clientResponse = service.findByName(name);
+            this.showTable(clientResponse.get());
+            return clientResponse;
         }catch (ClientNotFoundException e){
             System.out.println("Client with name " + name + " not found");
+            return null;
         }
     }
 
@@ -85,12 +88,12 @@ public class ClientUI {
         }
     }
 
-    public void create() {
+    public ClientResponse create() {
         secondaryTitle("Please enter all necessary information!");
-        final String name = scanString("Please enter the client full name : ", NOT_BLANK);
-        final String address = scanString("Please enter the client address : ", NOT_BLANK);
-        final String phone = scanString("Please enter the client phone (06/07) : ", VALID_PHONE);
-        final Boolean isProfessional = scanBoolean("Is the client professional (y/n) : ");
+        final String name = scanString("Please enter the client full name: ", NOT_BLANK);
+        final String address = scanString("Please enter the client address: ", NOT_BLANK);
+        final String phone = scanString("Please enter the client phone (06/07): ", VALID_PHONE);
+        final Boolean isProfessional = scanBoolean("Is the client professional (y/n): ");
 
         ClientRequest clientRequest = new ClientRequest(name, address, phone, isProfessional);
 
@@ -98,10 +101,15 @@ public class ClientUI {
             Client client = this.service.create(clientRequest);
             secondaryTitle("Client created successfully ✨ ");
             this.showTable(List.of(mapper.mapToDto(client)));
+            return mapper.mapToDto(client);
         } catch (RuntimeException e) {
             System.out.println("Cannot create client: " + e.getMessage());
+            return null;
         }
+
     }
+
+
 
     public void findAll(){
         final List<ClientResponse> clients = service.findAll();
@@ -110,9 +118,11 @@ public class ClientUI {
 
 
 
-    private void showTable( List<ClientResponse> clients) {
+
+    public static void showTable( List<ClientResponse> clients) {
 
         System.out.println(AsciiTable.getTable(AsciiTable.BASIC_ASCII_NO_DATA_SEPARATORS, clients, Arrays.asList(
+                new Column().header("#").headerAlign(CENTER).with(client -> Integer.toString(clients.indexOf(client) + 1)),
                 new Column().header("ID").headerAlign(CENTER).with(client -> String.valueOf(client.id())),
                 new Column().header("Name").headerAlign(CENTER).dataAlign(LEFT).with(ClientResponse::name),
                 new Column().header("Phone").headerAlign(RIGHT).dataAlign(CENTER).with(ClientResponse::phone),

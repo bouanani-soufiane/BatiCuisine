@@ -41,7 +41,7 @@ public class MainGUI {
         ProjectService projectService = new ProjectServiceImpl(projectRepository,projectDtoMapper );
         this.clientUI = new ClientUI(clientService ,clientDtoMapper);
 
-        this.projectUI = new ProjectUI(projectService, clientService);
+        this.projectUI = new ProjectUI(projectService, clientService , clientUI,clientDtoMapper,this);
     }
 
     public void menu () {

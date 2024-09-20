@@ -10,7 +10,7 @@ public interface BaseRepository<Entity, ID> {
 
     Optional<Entity> findById(ID id);
 
-    Optional<Entity> findByColumn(String columnName, String value);
+    Optional<List<Entity>> findByColumn(String columnName, String value);
 
     Entity create(Entity entity);
 

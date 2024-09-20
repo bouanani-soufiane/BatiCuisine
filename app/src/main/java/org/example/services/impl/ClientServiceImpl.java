@@ -9,7 +9,9 @@ import org.example.reposiroties.impl.ClientRepositoryImpl;
 import org.example.services.interfaces.ClientService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public class ClientServiceImpl implements ClientService {
 
@@ -40,9 +42,16 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public ClientResponse findByName ( String value ) throws ClientNotFoundException {
-        return mapper.mapToDto(repository.getByName( value));
+    public Optional<List<ClientResponse>> findByName(String value) throws ClientNotFoundException {
+        List<Client> clients = repository.getByName(value)
+                .orElseThrow(() -> new ClientNotFoundException("Client " + value + " was not found"));
+
+        List<ClientResponse> clientResponses = clients.stream()
+                .map(mapper::mapToDto).toList();
+
+        return Optional.of(clientResponses);
     }
+
 
 
 }
