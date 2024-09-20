@@ -17,7 +17,6 @@ public class Project  extends AbstractEntity{
 
     public Project (){
     }
-
     public Project ( String name, Double surface, ProjectStatus projectStatus, Double totalCost, Double profitMargin, Double tva, Client client ) {
         this.name = name;
         this.surface = surface;
@@ -106,5 +105,22 @@ public class Project  extends AbstractEntity{
     public Project setClient ( Client client ) {
         this.client = client;
         return this;
+    }
+
+    @Override
+    public String toString () {
+        return "Project{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surface=" + surface +
+                ", projectStatus=" + projectStatus +
+                ", totalCost=" + totalCost +
+                ", profitMargin=" + profitMargin +
+                ", tva=" + tva +
+                ", client=" + client +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                '}';
     }
 }

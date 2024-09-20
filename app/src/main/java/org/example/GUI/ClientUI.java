@@ -6,12 +6,10 @@ import org.example.dtos.requests.ClientRequest;
 import org.example.dtos.responses.ClientResponse;
 import org.example.entities.Client;
 import org.example.exceptions.ClientNotFoundException;
-import org.example.mappers.dtomapper.ClientDtoMapper;
 import org.example.mappers.dtomapper.EntityDtoMapper;
 import org.example.services.interfaces.ClientService;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 

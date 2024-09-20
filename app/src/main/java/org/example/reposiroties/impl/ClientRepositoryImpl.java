@@ -1,6 +1,5 @@
 package org.example.reposiroties.impl;
 
-import org.example.dtos.responses.ClientResponse;
 import org.example.entities.Client;
 import org.example.exceptions.ClientNotFoundException;
 import org.example.mappers.rowmapper.ClientRowMapper;
@@ -20,12 +19,11 @@ public class ClientRepositoryImpl extends BaseRepositoryImpl<Client , UUID> impl
     @Override
     public Client create ( Client client ) {
         final String query = "INSERT INTO clients (name, address, phone, is_professional) VALUES(?,?,?,?) RETURNING *";
+
         return executeQuery(query, stmt -> {
-            int count = 1;
-            stmt.setString(count++, client.name());
-            stmt.setString(count++, client.address());
-            stmt.setString(count++, client.phone());
-            stmt.setBoolean(count++, client.isProfessional());
+
+            entityRowMapper.map(client,stmt);
+
             try (ResultSet resultSet = stmt.executeQuery()) {
                if(resultSet.next()) {
                    return entityRowMapper.map(resultSet);
@@ -39,12 +37,7 @@ public class ClientRepositoryImpl extends BaseRepositoryImpl<Client , UUID> impl
         final String query = "UPDATE clients SET name = ?, address = ?, phone = ?, is_professional = ?, updated_at = now() WHERE id = ? RETURNING *";
 
          return executeQuery(query, stmt ->{
-             int count = 1;
-             stmt.setString(count++, client.name());
-             stmt.setString(count++, client.address());
-             stmt.setString(count++, client.phone());
-             stmt.setBoolean(count++, client.isProfessional());
-             stmt.setObject(count++, uuid);
+             entityRowMapper.map(client,stmt);
              try (ResultSet resultSet = stmt.executeQuery()) {
                  if(resultSet.next()) {
                      return entityRowMapper.map(resultSet);
