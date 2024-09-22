@@ -5,7 +5,6 @@ import org.example.exceptions.ClientNotFoundException;
 import org.example.mappers.rowmapper.ClientRowMapper;
 import org.example.reposiroties.BaseRepositoryImpl;
 import org.example.reposiroties.interfaces.ClientRepository;
-
 import java.sql.ResultSet;
 import java.util.List;
 import java.util.Optional;
@@ -23,17 +22,14 @@ public class ClientRepositoryImpl extends BaseRepositoryImpl<Client , UUID> impl
         final String query = "INSERT INTO clients (client_name, address, phone, is_professional) VALUES(?,?,?,?) RETURNING *";
 
         return executeQuery(query, stmt -> {
-
             entityRowMapper.map(client,stmt);
-
             try (ResultSet resultSet = stmt.executeQuery()) {
-               if(resultSet.next()) {
-                   return entityRowMapper.map(resultSet);
-               }
+                return resultSet.next() ? entityRowMapper.map(resultSet) : null;
             }
-            return null;
         });
     }
+
+
     @Override
     public Client update(UUID uuid, Client client) {
         final String query = "UPDATE clients SET client_name = ?, address = ?, phone = ?, is_professional = ?, updated_at = now() WHERE id = ? RETURNING *";

@@ -14,26 +14,11 @@ public class ProjectDtoMapper implements EntityDtoMapper<Project, ProjectRequest
 
     @Override
     public Project mapToEntity ( ProjectRequest dto ) {
-
         return new Project(dto.name(), dto.surface(), dto.projectStatus(), dto.totalCost(), dto.profitMargin(), dto.tva(), dto.client());
     }
 
     @Override
     public ProjectResponse mapToDto ( Project project ) {
-
-        ProjectResponse dto = new ProjectResponse(
-                project.id(),
-                project.name(),
-                project.surface(),
-                project.projectStatus(),
-                project.totalCost(),
-                project.profitMargin(),
-                project.tva(),
-                clientDtoMapper.mapToDto(project.client()),
-                project.createdAt(),
-                project.updatedAt()
-        );
-
-        return null;
+        return new ProjectResponse(project.id(), project.name(), project.surface(), project.projectStatus(), project.totalCost(), project.profitMargin(), project.tva(), clientDtoMapper.mapToDto(project.client()), project.createdAt(), project.updatedAt());
     }
 }

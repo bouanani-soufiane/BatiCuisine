@@ -1,7 +1,5 @@
 package org.example.entities;
 
-import org.example.enums.ComponentType;
-
 import java.time.LocalDateTime;
 
 public class Material extends Component{
@@ -10,17 +8,20 @@ public class Material extends Component{
     private Double transportCost;
     private Double coefficient;
 
+    public Material() {
+        super();
+    }
 
-    public Material ( String name, ComponentType componentType, Project project, Double tva , Double quantity, Double unitPrice, Double transportCost, Double coefficient ) {
-        super(name, componentType, project, tva);
+    public Material ( String name, Project project, Double tva , Double quantity, Double unitPrice, Double transportCost, Double coefficient ) {
+        super(name, project, tva);
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.transportCost = transportCost;
         this.coefficient = coefficient;
     }
 
-    public Material ( String name, ComponentType componentType, Project project, Double quantity, Double unitPrice, Double tva, Double transportCost, Double coefficient  , LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
-        super(name, componentType, project, tva, createdAt, updatedAt, deletedAt);
+    public Material ( String name, Project project, Double quantity, Double unitPrice, Double tva, Double transportCost, Double coefficient  , LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        super(name, project, tva, createdAt, updatedAt, deletedAt);
         this.quantity = quantity;
         this.unitPrice = unitPrice;
         this.transportCost = transportCost;
@@ -61,5 +62,18 @@ public class Material extends Component{
     public Material setCoefficient ( Double coefficient ) {
         this.coefficient = coefficient;
         return this;
+    }
+
+    @Override
+    public String toString () {
+        return "Material{" +
+                "quantity=" + quantity +
+                ", unitPrice=" + unitPrice +
+                ", transportCost=" + transportCost +
+                ", coefficient=" + coefficient +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                '}';
     }
 }

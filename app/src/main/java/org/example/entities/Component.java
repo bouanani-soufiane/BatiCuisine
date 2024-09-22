@@ -1,14 +1,11 @@
 package org.example.entities;
 
-import org.example.enums.ComponentType;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 public abstract class Component  extends AbstractEntity{
     private UUID id;
     private String name;
-    private ComponentType componentType;
     private Double tva;
     private Project project;
 
@@ -16,14 +13,13 @@ public abstract class Component  extends AbstractEntity{
 
     }
 
-    public Component ( String name, ComponentType componentType, Project project, Double tva ) {
+    public Component ( String name, Project project, Double tva ) {
         this.name = name;
-        this.componentType = componentType;
         this.tva = tva ;
         this.project = project;
     }
-    public Component ( String name, ComponentType componentType, Project project ,Double tva, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
-        this(name , componentType, project ,tva);
+    public Component ( String name, Project project ,Double tva, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this(name, project ,tva);
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
@@ -46,15 +42,6 @@ public abstract class Component  extends AbstractEntity{
 
     public Component setName ( String name ) {
         this.name = name;
-        return this;
-    }
-
-    public ComponentType componentType () {
-        return componentType;
-    }
-
-    public Component setComponentType ( ComponentType componentType ) {
-        this.componentType = componentType;
         return this;
     }
 

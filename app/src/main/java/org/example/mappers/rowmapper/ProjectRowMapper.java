@@ -3,7 +3,6 @@ package org.example.mappers.rowmapper;
 import org.example.entities.Client;
 import org.example.entities.Project;
 import org.example.enums.ProjectStatus;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,6 +17,7 @@ public class ProjectRowMapper implements  EntityRowMapper<Project>{
 
     @Override
     public Project map ( ResultSet resultSet ) throws SQLException {
+
         Project project = new Project();
         project.setId(UUID.fromString(resultSet.getString("id")));
         project.setName(resultSet.getString("name"));
@@ -27,6 +27,7 @@ public class ProjectRowMapper implements  EntityRowMapper<Project>{
         project.setProjectStatus(ProjectStatus.valueOf(resultSet.getString("project_status")));
         project.setTotalCost(resultSet.getDouble("total_cost"));
         project.setClient(clientRowMapper.map(resultSet));
+
         return project;
     }
 

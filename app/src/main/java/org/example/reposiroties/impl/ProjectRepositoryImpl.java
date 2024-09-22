@@ -35,12 +35,8 @@ public class ProjectRepositoryImpl extends BaseRepositoryImpl<Project, UUID> imp
             entityRowMapper.map(project, stmt);
 
             try (ResultSet resultSet = stmt.executeQuery()) {
-                if (resultSet.next()) {
-                    return entityRowMapper.map(resultSet);
-                }
+                return resultSet.next() ? entityRowMapper.map(resultSet) : null;
             }
-
-            return null;
         });
     }
 

@@ -1,7 +1,6 @@
 package org.example.dtos.responses;
 
 import org.example.enums.ProjectStatus;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 

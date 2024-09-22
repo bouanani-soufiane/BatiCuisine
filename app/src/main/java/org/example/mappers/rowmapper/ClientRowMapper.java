@@ -1,7 +1,6 @@
 package org.example.mappers.rowmapper;
 
 import org.example.entities.Client;
-
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

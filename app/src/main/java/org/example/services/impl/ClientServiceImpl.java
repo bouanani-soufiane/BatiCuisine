@@ -7,11 +7,9 @@ import org.example.exceptions.ClientNotFoundException;
 import org.example.mappers.dtomapper.ClientDtoMapper;
 import org.example.reposiroties.impl.ClientRepositoryImpl;
 import org.example.services.interfaces.ClientService;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ClientServiceImpl implements ClientService {
 

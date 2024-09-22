@@ -3,12 +3,10 @@ package org.example.mappers.dtomapper;
 import org.example.dtos.requests.ClientRequest;
 import org.example.dtos.responses.ClientResponse;
 import org.example.entities.Client;
-
-import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 public class ClientDtoMapper implements EntityDtoMapper<Client, ClientRequest, ClientResponse> {
+
     @Override
     public Client mapToEntity ( ClientRequest dto ) {
         return new Client(dto.name(), dto.address(), dto.phone(), dto.isProfessional(), List.of());
