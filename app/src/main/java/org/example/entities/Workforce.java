@@ -1,7 +1,5 @@
 package org.example.entities;
 
-import org.example.enums.ComponentType;
-
 import java.time.LocalDateTime;
 
 public class Workforce extends Component{
@@ -9,15 +7,19 @@ public class Workforce extends Component{
     private Double workingHours;
     private Double productivityFactor;
 
-    public Workforce ( String name, ComponentType componentType, Project project , Double tva, Double pricePerHour, Double workingHours, Double productivityFactor ) {
-        super(name, componentType, project , tva);
+    public Workforce(){
+        super();
+    }
+
+    public Workforce ( String name, Project project , Double tva, Double pricePerHour, Double workingHours, Double productivityFactor ) {
+        super(name, project , tva);
         this.pricePerHour = pricePerHour;
         this.workingHours = workingHours;
         this.productivityFactor = productivityFactor;
     }
 
-    public Workforce ( String name, ComponentType componentType, Project project , Double tva , Double pricePerHour, Double workingHours, Double productivityFactor, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt ) {
-        super(name, componentType, project, tva,createdAt, updatedAt, deletedAt);
+    public Workforce ( String name, Project project , Double tva , Double pricePerHour, Double workingHours, Double productivityFactor, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt ) {
+        super(name, project, tva,createdAt, updatedAt, deletedAt);
         this.pricePerHour = pricePerHour;
         this.workingHours = workingHours;
         this.productivityFactor = productivityFactor;

@@ -1,22 +1,29 @@
 package org.example.GUI;
 
 import org.example.dtos.requests.ProjectRequest;
+import org.example.dtos.requests.WorkforceRequest;
 import org.example.dtos.responses.ProjectResponse;
+import org.example.dtos.responses.WorkforceResponse;
+import org.example.entities.Material;
 import org.example.entities.Project;
-import org.example.mappers.dtomapper.ClientDtoMapper;
-import org.example.mappers.dtomapper.EntityDtoMapper;
-import org.example.mappers.dtomapper.ProjectDtoMapper;
-import org.example.mappers.rowmapper.ClientRowMapper;
-import org.example.mappers.rowmapper.EntityRowMapper;
-import org.example.mappers.rowmapper.ProjectRowMapper;
+import org.example.entities.Workforce;
+import org.example.mappers.dtomapper.*;
+import org.example.mappers.rowmapper.*;
 import org.example.reposiroties.impl.ClientRepositoryImpl;
+import org.example.reposiroties.impl.MaterialRepositoryImpl;
 import org.example.reposiroties.impl.ProjectRepositoryImpl;
-import org.example.reposiroties.interfaces.ClientRepository;
+import org.example.reposiroties.impl.WorkforceRepositoryImpl;
+import org.example.reposiroties.interfaces.MaterialRepository;
 import org.example.reposiroties.interfaces.ProjectRepository;
+import org.example.reposiroties.interfaces.WorkforceRepository;
 import org.example.services.impl.ClientServiceImpl;
+import org.example.services.impl.MaterialServiceImpl;
 import org.example.services.impl.ProjectServiceImpl;
+import org.example.services.impl.WorkforceServiceImpl;
 import org.example.services.interfaces.ClientService;
+import org.example.services.interfaces.MaterialService;
 import org.example.services.interfaces.ProjectService;
+import org.example.services.interfaces.WorkforceService;
 
 import java.util.Scanner;
 
@@ -34,14 +41,22 @@ public class MainGUI {
         ClientRowMapper clientRowMapper = new ClientRowMapper();
         ClientDtoMapper clientDtoMapper = new ClientDtoMapper();
         ClientRepositoryImpl clientRepository = new ClientRepositoryImpl(clientRowMapper);
-        ClientService clientService = new ClientServiceImpl(clientRepository , clientDtoMapper);
+        ClientService clientService = new ClientServiceImpl(clientRepository, clientDtoMapper);
         EntityRowMapper<Project> projectRowMapper = new ProjectRowMapper(clientRowMapper);
         ProjectRepository projectRepository = new ProjectRepositoryImpl(projectRowMapper);
         EntityDtoMapper<Project, ProjectRequest, ProjectResponse> projectDtoMapper = new ProjectDtoMapper(clientDtoMapper);
-        ProjectService projectService = new ProjectServiceImpl(projectRepository,projectDtoMapper );
-        this.clientUI = new ClientUI(clientService ,clientDtoMapper);
+        ProjectService projectService = new ProjectServiceImpl(projectRepository, projectDtoMapper);
+        this.clientUI = new ClientUI(clientService, clientDtoMapper);
+        EntityRowMapper<Material> materialRowMapper = new MaterialRowMapper(projectRowMapper);
+        MaterialRepository materialRepository = new MaterialRepositoryImpl(materialRowMapper);
+        MaterialDtoMapper materialDtoMapper = new MaterialDtoMapper();
+        MaterialService materialService = new MaterialServiceImpl(materialRepository, materialDtoMapper);
+        EntityRowMapper<Workforce> workforceRowMapper = new WorkforceRowMapper(projectRowMapper);
+        WorkforceRepository workforceRepository = new WorkforceRepositoryImpl(workforceRowMapper);
+        EntityDtoMapper<Workforce, WorkforceRequest, WorkforceResponse> workforceDtoMapper = new WorkforceDtoMapper();
+        WorkforceService workforceService = new WorkforceServiceImpl(workforceRepository,workforceDtoMapper);
 
-        this.projectUI = new ProjectUI(projectService, clientService , clientUI,clientDtoMapper,this);
+        this.projectUI = new ProjectUI(projectService, clientService, clientUI, clientDtoMapper, this, materialService,workforceService);
     }
 
     public void menu () {
@@ -58,7 +73,10 @@ public class MainGUI {
             case 1 -> clientUI.showMenu();
             case 2 -> projectUI.showMenu();
             case 3 -> System.out.println("Quotation management");
-            case 4 -> { System.out.println("Good bye") ;System.exit(0);}
+            case 4 -> {
+                System.out.println("Good bye");
+                System.exit(0);
+            }
             default -> throw new IllegalArgumentException("Invalid choice");
         }
     }

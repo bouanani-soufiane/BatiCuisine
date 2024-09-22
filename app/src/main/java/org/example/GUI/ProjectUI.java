@@ -1,23 +1,20 @@
 package org.example.GUI;
 
-import com.github.freva.asciitable.AsciiTable;
-import com.github.freva.asciitable.Column;
-import org.example.dtos.requests.ClientRequest;
+import org.example.dtos.requests.MaterialRequest;
 import org.example.dtos.requests.ProjectRequest;
+import org.example.dtos.requests.WorkforceRequest;
 import org.example.dtos.responses.ClientResponse;
-import org.example.entities.Client;
+import org.example.entities.Material;
 import org.example.entities.Project;
 import org.example.enums.ProjectStatus;
 import org.example.exceptions.ClientNotFoundException;
 import org.example.mappers.dtomapper.ClientDtoMapper;
-import org.example.mappers.dtomapper.EntityDtoMapper;
 import org.example.services.interfaces.ClientService;
+import org.example.services.interfaces.MaterialService;
 import org.example.services.interfaces.ProjectService;
+import org.example.services.interfaces.WorkforceService;
 
 import java.util.*;
-
-import static com.github.freva.asciitable.HorizontalAlign.*;
-import static com.github.freva.asciitable.HorizontalAlign.CENTER;
 import static org.example.GUI.ClientUI.showTable;
 import static org.example.utils.Print.*;
 import static org.example.utils.ValidatedInputReader.*;
@@ -30,36 +27,46 @@ public class ProjectUI {
     private final ClientUI clientUI;
     private final ClientDtoMapper clientMapper;
     private final MainGUI mainGUI;
+    private final MaterialService materialService;
+    private final WorkforceService workforceService;
 
-    public ProjectUI ( ProjectService service, ClientService clientService, ClientUI clientUI, ClientDtoMapper clientMapper, MainGUI mainGUI ) {
+    public ProjectUI ( ProjectService service, ClientService clientService, ClientUI clientUI, ClientDtoMapper clientMapper, MainGUI mainGUI, MaterialService materialService, WorkforceService workforceService ) {
         this.service = service;
         this.clientService = clientService;
         this.clientUI = clientUI;
         this.clientMapper = clientMapper;
         this.mainGUI = mainGUI;
+        this.materialService = materialService;
+        this.workforceService = workforceService;
     }
 
     public void showMenu () {
-        title("Welcome to Project menu \uD83D\uDCC4 ");
-        System.out.println("1. Create new project");
-        System.out.println("2. Show all projects");
-        System.out.println("3. Update an existing project");
+        int userChoice;
+        do {
 
-        Integer userChoice = scanInt("Please to enter you choice: ", POSITIVE_INT);
+            title("Welcome to Project menu \uD83D\uDCC4 ");
+            System.out.println("1. Create new project");
+            System.out.println("2. Show all projects");
+            System.out.println("3. Update an existing project");
 
-        switch (userChoice) {
-            case 1 -> this.create();
-            case 2 -> this.create();
-            case 3 -> this.create();
-            case 4 -> this.mainGUI.menu();
-            default -> throw new IllegalArgumentException("Invalid choice");
-        }
+            userChoice = scanInt("Please to enter you choice: ", POSITIVE_INT);
+
+            switch (userChoice) {
+                case 1 -> this.create();
+                case 2 -> this.create();
+                case 3 -> this.create();
+                case 4 -> this.mainGUI.menu();
+                default -> throw new IllegalArgumentException("Invalid choice");
+            }
+        } while (userChoice != 0);
     }
+
 
     private void create () {
         ClientResponse choosedClient = chooseOrCreateClient();
         createProject(choosedClient);
     }
+
 
     private ClientResponse chooseOrCreateClient () {
         title("Search for Client");
@@ -102,9 +109,9 @@ public class ProjectUI {
                 return chooseOrCreateClient();
             }
         }
-
         return choosedClient;
     }
+
 
     private void createProject ( ClientResponse choosedClient ) {
         if (choosedClient == null) {
@@ -122,8 +129,38 @@ public class ProjectUI {
         ProjectRequest projectRequest = new ProjectRequest(name, surface, status, totalCost, profitMargin, tva, clientMapper.mapToEntity(choosedClient));
         Project project = this.service.create(projectRequest);
 
+        title("Add New Workforce");
+
+        final String workforceName = scanString("enter workforce name : " , NOT_BLANK);
+        final Double workforceTva = scanDouble("enter the value of tva : ",POSITIVE_DOUBLE);
+        final Double price_per_hour  = scanDouble("Enter the price per hour : ", POSITIVE_DOUBLE);
+        final Double working_hours = scanDouble("Enter the working hours : ", POSITIVE_DOUBLE);
+        final Double productivity_factor = scanDouble("Enter the productivity factor : ", POSITIVE_DOUBLE);
+
+        WorkforceRequest workforceRequest = new WorkforceRequest(workforceName , workforceTva , price_per_hour,working_hours,productivity_factor,project);
+
+        this.workforceService.create(workforceRequest);
+//        System.out.println("here : "+workforceRequest);
+
+
+
+//        title("Add New Material");
+//
+//        final String MaterialName = scanString("enter material name : " , NOT_BLANK);
+//        final Double quantity = scanDouble("enter the quantity : ",POSITIVE_DOUBLE);
+//        final Double unitPrice = scanDouble("enter the unitPrice : ",POSITIVE_DOUBLE);
+//        final Double MaterialTva = scanDouble("enter the value of tva : ",POSITIVE_DOUBLE);
+//        final Double transportCost = scanDouble("enter the transportCost : ",POSITIVE_DOUBLE);
+//        final Double coefficient = scanDouble("enter the coefficient : ",POSITIVE_DOUBLE);
+
+//        MaterialRequest materialRequest = new MaterialRequest(MaterialName , MaterialTva , quantity, unitPrice, transportCost,coefficient , project);
+
+//        Material material = this.materialService.create(materialRequest);
+
+//        System.out.println(material);
         System.out.println(project);
     }
+
 
     Optional<ClientResponse> chooseClientByName () {
         final String name = scanString("entre client name : ", NOT_BLANK);
