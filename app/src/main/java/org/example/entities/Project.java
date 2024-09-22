@@ -3,6 +3,7 @@ package org.example.entities;
 import org.example.enums.ProjectStatus;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public class Project  extends AbstractEntity{
@@ -14,6 +15,8 @@ public class Project  extends AbstractEntity{
     private Double profitMargin;
     private Double tva;
     private Client client;
+    private List<Material> materials;
+    private List<Workforce> workforces;
 
     public Project (){
     }
@@ -107,6 +110,24 @@ public class Project  extends AbstractEntity{
         return this;
     }
 
+    public List<Material> materials () {
+        return materials;
+    }
+
+    public Project setMaterials ( List<Material> materials ) {
+        this.materials = materials;
+        return this;
+    }
+
+    public List<Workforce> workforces () {
+        return workforces;
+    }
+
+    public Project setWorkforces ( List<Workforce> workforces ) {
+        this.workforces = workforces;
+        return this;
+    }
+
     @Override
     public String toString () {
         return "Project{" +
@@ -118,6 +139,8 @@ public class Project  extends AbstractEntity{
                 ", profitMargin=" + profitMargin +
                 ", tva=" + tva +
                 ", client=" + client +
+                ", materials=" + materials +
+                ", workforces=" + workforces +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 ", deletedAt=" + deletedAt +

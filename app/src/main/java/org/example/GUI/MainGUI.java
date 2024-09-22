@@ -24,9 +24,7 @@ import org.example.services.interfaces.ClientService;
 import org.example.services.interfaces.MaterialService;
 import org.example.services.interfaces.ProjectService;
 import org.example.services.interfaces.WorkforceService;
-
 import java.util.Scanner;
-
 import static org.example.utils.Print.title;
 import static org.example.utils.ValidatedInputReader.scanInt;
 import static org.example.utils.ValidationCriteria.*;
@@ -35,28 +33,36 @@ public class MainGUI {
 
     private final ClientUI clientUI;
     private final ProjectUI projectUI;
+    private final ClientService clientService;
+    private final ClientDtoMapper clientDtoMapper;
+    private final ProjectService projectService;
+    private final MaterialService materialService;
+    private final WorkforceService workforceService;
 
-
-    public MainGUI ( Scanner scanner ) {
+    public MainGUI(Scanner scanner) {
         ClientRowMapper clientRowMapper = new ClientRowMapper();
-        ClientDtoMapper clientDtoMapper = new ClientDtoMapper();
+        this.clientDtoMapper = new ClientDtoMapper();
         ClientRepositoryImpl clientRepository = new ClientRepositoryImpl(clientRowMapper);
-        ClientService clientService = new ClientServiceImpl(clientRepository, clientDtoMapper);
-        EntityRowMapper<Project> projectRowMapper = new ProjectRowMapper(clientRowMapper);
+        this.clientService = new ClientServiceImpl(clientRepository, clientDtoMapper);
+
+        ProjectRowMapper projectRowMapper = new ProjectRowMapper(clientRowMapper);
         ProjectRepository projectRepository = new ProjectRepositoryImpl(projectRowMapper);
         EntityDtoMapper<Project, ProjectRequest, ProjectResponse> projectDtoMapper = new ProjectDtoMapper(clientDtoMapper);
-        ProjectService projectService = new ProjectServiceImpl(projectRepository, projectDtoMapper);
-        this.clientUI = new ClientUI(clientService, clientDtoMapper);
+        this.projectService = new ProjectServiceImpl(projectRepository, projectDtoMapper);
+
+        this.clientUI = new ClientUI(clientService, clientDtoMapper, this);
+
         EntityRowMapper<Material> materialRowMapper = new MaterialRowMapper(projectRowMapper);
         MaterialRepository materialRepository = new MaterialRepositoryImpl(materialRowMapper);
         MaterialDtoMapper materialDtoMapper = new MaterialDtoMapper();
-        MaterialService materialService = new MaterialServiceImpl(materialRepository, materialDtoMapper);
+        this.materialService = new MaterialServiceImpl(materialRepository, materialDtoMapper);
+
         EntityRowMapper<Workforce> workforceRowMapper = new WorkforceRowMapper(projectRowMapper);
         WorkforceRepository workforceRepository = new WorkforceRepositoryImpl(workforceRowMapper);
         EntityDtoMapper<Workforce, WorkforceRequest, WorkforceResponse> workforceDtoMapper = new WorkforceDtoMapper();
-        WorkforceService workforceService = new WorkforceServiceImpl(workforceRepository,workforceDtoMapper);
+        this.workforceService = new WorkforceServiceImpl(workforceRepository, workforceDtoMapper);
 
-        this.projectUI = new ProjectUI(projectService, clientService, clientUI, clientDtoMapper, this, materialService,workforceService);
+        this.projectUI = new ProjectUI(projectService, clientUI, clientDtoMapper, this, materialService, workforceService);
     }
 
     public void menu () {
@@ -65,7 +71,6 @@ public class MainGUI {
         System.out.println("2. Project Management");
         System.out.println("3. Quotation Management");
         System.out.println("4. Exit");
-
 
         Integer userChoice = scanInt("Please to enter you choice: ", POSITIVE_INT);
 

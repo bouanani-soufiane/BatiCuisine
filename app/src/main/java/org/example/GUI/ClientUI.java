@@ -19,12 +19,15 @@ import static org.example.utils.ValidationCriteria.*;
 
 public class ClientUI {
 
-    ClientService service;
-    EntityDtoMapper<Client, ClientRequest, ClientResponse> mapper;
+    private final ClientService service;
+    private final EntityDtoMapper<Client, ClientRequest, ClientResponse> mapper;
+    private final MainGUI mainGUI;
 
-    public ClientUI ( ClientService service, EntityDtoMapper<Client, ClientRequest, ClientResponse> mapper ) {
+    public ClientUI ( ClientService service, EntityDtoMapper<Client, ClientRequest, ClientResponse> mapper, MainGUI mainGUI ) {
         this.service = service;
         this.mapper = mapper;
+        this.mainGUI = mainGUI;
+
     }
 
     public void showMenu () {
@@ -118,6 +121,68 @@ public class ClientUI {
         showTable(clients);
     }
 
+
+    ClientResponse chooseOrCreateClient () {
+        title("Search for Client");
+        secondaryTitle("Would you like to search for an existing client or add a new one?");
+        secondaryTitle("1. Add a new client");
+        secondaryTitle("2. Search for client");
+        secondaryTitle("3. Back");
+
+        final int clientChoice = scanInt("Please enter client choice: ", POSITIVE_INT);
+        ClientResponse choosedClient = null;
+
+        switch (clientChoice) {
+            case 1 -> choosedClient = this.create();
+            case 2 -> {
+                boolean searching = true;
+                while (searching) {
+                    Optional<ClientResponse> optionalClient = chooseClientByName();
+                    if (optionalClient.isPresent()) {
+                        choosedClient = optionalClient.get();
+                        searching = false;
+                    } else {
+                        Integer decision = scanInt("Do you want to (1) create a new client or (2) keep searching? (Enter 1 or 2): ", POSITIVE_INT);
+                        switch (decision) {
+                            case 1 -> {
+                                choosedClient = create();
+                                searching = false;
+                            }
+                            case 2 -> System.out.println("Let's search again.");
+                            default -> System.out.println("Invalid input. Please try again.");
+                        }
+                    }
+                }
+            }
+            case 3 -> {
+                mainGUI.menu();
+                return null;
+            }
+            default -> {
+                System.out.println("Invalid choice. Please select a valid option.");
+                return chooseOrCreateClient();
+            }
+        }
+        return choosedClient;
+    }
+
+    Optional<ClientResponse> chooseClientByName () {
+        final String name = scanString("entre client name : ", NOT_BLANK);
+        try {
+            Optional<List<ClientResponse>> clients = this.service.findByName(name);
+            if (clients.isPresent()) {
+                System.out.println("here's the  list of client with (" + name.toUpperCase() + ") as client name : ");
+                showTable(clients.get());
+                final int selectedClientChoice = scanInt("Please to enter client choice:  ", combine(POSITIVE_INT, ( n ) -> n <= clients.get().size()));
+                return clients.get().stream().skip(selectedClientChoice - 1).findFirst();
+            } else {
+                return Optional.empty();
+            }
+        } catch (ClientNotFoundException e) {
+            System.out.println(e.getMessage());
+            return Optional.empty();
+        }
+    }
 
     public static void showTable ( List<ClientResponse> clients ) {
 

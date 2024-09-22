@@ -3,6 +3,7 @@ package org.example.mappers.dtomapper;
 import org.example.dtos.requests.ClientRequest;
 import org.example.dtos.responses.ClientResponse;
 import org.example.entities.Client;
+
 import java.util.List;
 
 public class ClientDtoMapper implements EntityDtoMapper<Client, ClientRequest, ClientResponse> {
@@ -18,7 +19,6 @@ public class ClientDtoMapper implements EntityDtoMapper<Client, ClientRequest, C
     }
 
     public Client mapToEntity ( ClientResponse dto ) {
-        return new Client(dto.id() , dto.name(), dto.address(), dto.phone(), dto.isProfessional(), List.of());
-
+        return new Client(dto.id(), dto.name(), dto.address(), dto.phone(), dto.isProfessional(), List.of());
     }
 }

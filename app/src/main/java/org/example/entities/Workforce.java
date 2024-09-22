@@ -52,4 +52,6 @@ public class Workforce extends Component{
         this.productivityFactor = productivityFactor;
         return this;
     }
+
+
 }
