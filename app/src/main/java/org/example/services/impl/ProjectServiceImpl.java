@@ -8,7 +8,6 @@ import org.example.mappers.dtomapper.EntityDtoMapper;
 import org.example.reposiroties.interfaces.ProjectRepository;
 import org.example.services.interfaces.ProjectService;
 
-import java.util.Optional;
 import java.util.UUID;
 
 public class ProjectServiceImpl implements ProjectService {
@@ -29,5 +28,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project findById ( UUID id ) {
         return repository.findById(id).orElseThrow(() -> new ProjectNotFound(id));
+    }
+
+    @Override
+    public Project update ( UUID id, Project project ) {
+        return repository.update(id, project);
     }
 }

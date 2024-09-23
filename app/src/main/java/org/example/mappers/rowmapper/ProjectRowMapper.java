@@ -5,6 +5,7 @@ import org.example.entities.Material;
 import org.example.entities.Project;
 import org.example.entities.Workforce;
 import org.example.enums.ProjectStatus;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,10 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class ProjectRowMapper implements  EntityRowMapper<Project> , ProjectAllRowsMapper{
+public class ProjectRowMapper implements EntityRowMapper<Project>, ProjectAllRowsMapper {
 
-    private final EntityRowMapper<Client>  clientRowMapper;
-    public ProjectRowMapper(EntityRowMapper<Client>  clientRowMapper){
+    private final EntityRowMapper<Client> clientRowMapper;
+
+    public ProjectRowMapper ( EntityRowMapper<Client> clientRowMapper ) {
         this.clientRowMapper = clientRowMapper;
     }
 
@@ -27,10 +29,7 @@ public class ProjectRowMapper implements  EntityRowMapper<Project> , ProjectAllR
         project.setId(UUID.fromString(resultSet.getString("id")));
         project.setName(resultSet.getString("name"));
         project.setSurface(resultSet.getDouble("surface"));
-        project.setTva(resultSet.getDouble("tva"));
-        project.setProfitMargin(resultSet.getDouble("profit_margin"));
         project.setProjectStatus(ProjectStatus.valueOf(resultSet.getString("project_status")));
-        project.setTotalCost(resultSet.getDouble("total_cost"));
         project.setClient(clientRowMapper.map(resultSet));
 
         return project;
@@ -38,60 +37,85 @@ public class ProjectRowMapper implements  EntityRowMapper<Project> , ProjectAllR
 
     @Override
     public Project mapWithRelations ( ResultSet resultSet ) throws SQLException {
-        Client client = new Client();
-        client.setId(UUID.fromString(resultSet.getString(12)));
-        client.setName(resultSet.getString(13));
-        client.setAddress(resultSet.getString(14));
-        client.setPhone(resultSet.getString(15));
-        client.setProfessional(resultSet.getBoolean(16));
-
-        Material material = new Material();
-        material.setName(resultSet.getString(20));
-        material.setQuantity(resultSet.getDouble(21));
-        material.setCoefficient(resultSet.getDouble(22));
-        material.setTva(resultSet.getDouble(23));
-        material.setTransportCost(resultSet.getDouble(24));
-        material.setUnitPrice(resultSet.getDouble(25));
-
-        Workforce workforce = new Workforce();
-        workforce.setName(resultSet.getString(26));
-        workforce.setTva(resultSet.getDouble(27));
-        workforce.setPricePerHour(resultSet.getDouble(28));
-        workforce.setWorkingHours(resultSet.getDouble(29));
-        workforce.setProductivityFactor(resultSet.getDouble(30));
-
         Project project = new Project();
-        project.setId(UUID.fromString(resultSet.getString(1)));
-        project.setName(resultSet.getString(2));
-        project.setSurface(resultSet.getDouble(3));
-        project.setProjectStatus(ProjectStatus.valueOf(resultSet.getString(4)));
-        project.setTotalCost(resultSet.getDouble(5));
-        project.setProfitMargin(resultSet.getDouble(6));
-        project.setTva(resultSet.getDouble(7));
-        project.setClient(client);
         List<Material> materials = new ArrayList<>();
-        materials.add(material);
-        project.setMaterials(materials);
-
         List<Workforce> workforces = new ArrayList<>();
-        workforces.add(workforce);
+
+        do {
+            // project
+            if (resultSet.isFirst()) {
+                project.setId(UUID.fromString(resultSet.getString(1)));
+                project.setName(resultSet.getString(2));
+                project.setSurface(resultSet.getDouble(3));
+                project.setProjectStatus(ProjectStatus.valueOf(resultSet.getString(4)));
+                project.setTotalCost(resultSet.getDouble(5));
+                project.setProfitMargin(resultSet.getDouble(6));
+
+                // Client
+                Client client = new Client();
+                client.setId(UUID.fromString(resultSet.getString(11)));
+                client.setName(resultSet.getString(12));
+                client.setAddress(resultSet.getString(13));
+                client.setPhone(resultSet.getString(14));
+                client.setProfessional(resultSet.getBoolean(15));
+                project.setClient(client);
+            }
+
+            // materials
+            if (isMaterialRowValid(resultSet)) {
+                Material material = new Material();
+                material.setName(resultSet.getString(20));
+                material.setTva(resultSet.getDouble(21));
+                material.setQuantity(resultSet.getDouble(26));
+                material.setUnitPrice(resultSet.getDouble(27));
+                material.setTransportCost(resultSet.getDouble(28));
+                material.setCoefficient(resultSet.getDouble(29));
+                materials.add(material);
+            }
+
+            // workfoces
+            if (isWorkforceRowValid(resultSet)) {
+                Workforce workforce = new Workforce();
+                workforce.setName(resultSet.getString(20));
+                workforce.setTva(resultSet.getDouble(21));
+                workforce.setPricePerHour(resultSet.getDouble(30));
+                workforce.setWorkingHours(resultSet.getDouble(31));
+                workforce.setProductivityFactor(resultSet.getDouble(32));
+                workforces.add(workforce);
+            }
+
+        } while (resultSet.next());
+
+        project.setMaterials(materials);
         project.setWorkforces(workforces);
 
         return project;
     }
 
+    private boolean isMaterialRowValid ( ResultSet resultSet ) throws SQLException {
+        return resultSet.getString(20) != null &&
+                resultSet.getDouble(26) > 0 &&
+                resultSet.getDouble(27) > 0 &&
+                resultSet.getDouble(28) > 0 &&
+                resultSet.getDouble(29) > 0;
+    }
+
+
+    private boolean isWorkforceRowValid ( ResultSet resultSet ) throws SQLException {
+        return resultSet.getString(20) != null &&
+                resultSet.getDouble(30) > 0 &&
+                resultSet.getDouble(31) > 0 &&
+                resultSet.getDouble(32) > 0;
+    }
 
 
     @Override
     public void map ( Project project, PreparedStatement stmt ) throws SQLException {
         int counter = 1;
-        stmt.setString(counter++ , project.name());
-        stmt.setDouble(counter++ , project.surface());
-        stmt.setObject(counter++ , project.projectStatus().toString());
-        stmt.setDouble(counter++ , project.totalCost());
-        stmt.setDouble(counter++ , project.profitMargin());
-        stmt.setDouble(counter++ , project.tva());
-        stmt.setObject(counter++ , project.client().id());
+        stmt.setString(counter++, project.name());
+        stmt.setDouble(counter++, project.surface());
+        stmt.setObject(counter++, project.projectStatus().toString());
+        stmt.setObject(counter++, project.client().id());
 
     }
 }

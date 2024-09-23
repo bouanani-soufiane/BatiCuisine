@@ -13,25 +13,22 @@ public class Project  extends AbstractEntity{
     private ProjectStatus projectStatus;
     private Double totalCost;
     private Double profitMargin;
-    private Double tva;
     private Client client;
     private List<Material> materials;
     private List<Workforce> workforces;
 
     public Project (){
     }
-    public Project ( String name, Double surface, ProjectStatus projectStatus, Double totalCost, Double profitMargin, Double tva, Client client ) {
+    public Project ( String name, Double surface, ProjectStatus projectStatus,  Client client ) {
         this.name = name;
         this.surface = surface;
         this.projectStatus = projectStatus;
-        this.totalCost = totalCost;
-        this.profitMargin = profitMargin;
-        this.tva = tva;
+
         this.client = client;
     }
 
-    public Project ( String name, Double surface, ProjectStatus projectStatus, Double totalCost, Double profitMargin, Double tva, Client client, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt ) {
-       this(name,surface,projectStatus,totalCost,profitMargin,tva,client);
+    public Project ( String name, Double surface, ProjectStatus projectStatus, Client client, LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt ) {
+       this(name,surface,projectStatus,client);
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
@@ -92,15 +89,6 @@ public class Project  extends AbstractEntity{
         return this;
     }
 
-    public Double tva () {
-        return tva;
-    }
-
-    public Project setTva ( Double tva ) {
-        this.tva = tva;
-        return this;
-    }
-
     public Client client () {
         return client;
     }
@@ -137,7 +125,6 @@ public class Project  extends AbstractEntity{
                 ", projectStatus=" + projectStatus +
                 ", totalCost=" + totalCost +
                 ", profitMargin=" + profitMargin +
-                ", tva=" + tva +
                 ", client=" + client +
                 ", materials=" + materials +
                 ", workforces=" + workforces +

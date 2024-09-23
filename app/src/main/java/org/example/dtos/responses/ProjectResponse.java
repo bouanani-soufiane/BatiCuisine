@@ -11,7 +11,6 @@ public record ProjectResponse(
         ProjectStatus projectStatus,
         Double totalCost,
         Double profitMargin,
-        Double tva,
         ClientResponse client,
         LocalDateTime createdAt,
         LocalDateTime updatedAt

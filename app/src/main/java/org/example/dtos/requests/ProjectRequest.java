@@ -7,9 +7,6 @@ public record ProjectRequest (
         String name,
         Double surface,
         ProjectStatus projectStatus,
-        Double totalCost,
-        Double profitMargin,
-        Double tva,
         Client client
 ){
 }

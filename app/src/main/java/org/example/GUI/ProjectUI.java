@@ -7,11 +7,13 @@ import org.example.dtos.responses.ClientResponse;
 import org.example.entities.Project;
 import org.example.enums.ProjectStatus;
 import org.example.mappers.dtomapper.ClientDtoMapper;
-import org.example.services.interfaces.ClientService;
 import org.example.services.interfaces.MaterialService;
 import org.example.services.interfaces.ProjectService;
 import org.example.services.interfaces.WorkforceService;
-
+import java.util.List;
+import static org.example.GUI.ClientUI.showClientTable;
+import static org.example.GUI.MaterialUI.showMaterialTable;
+import static org.example.GUI.WorkforceUI.showWorkforceTable;
 import static org.example.utils.Print.*;
 import static org.example.utils.ValidatedInputReader.*;
 import static org.example.utils.ValidationCriteria.*;
@@ -70,28 +72,43 @@ public class ProjectUI {
 
         final String name = scanString("Enter project name: ", NOT_BLANK);
         final double surface = scanDouble("Enter the project surface: ", POSITIVE_DOUBLE);
-        final ProjectStatus status = ProjectStatus.PENDING;
-        final double totalCost = scanDouble("Enter the total cost: ", POSITIVE_DOUBLE);
-        final double profitMargin = scanDouble("Enter the profit margin: ", POSITIVE_DOUBLE);
-        final double tva = scanDouble("Enter the TVA: ", POSITIVE_DOUBLE);
 
-        ProjectRequest projectRequest = new ProjectRequest(name, surface, status, totalCost, profitMargin, tva, clientMapper.mapToEntity(choosedClient));
+        ProjectRequest projectRequest = new ProjectRequest(name, surface, ProjectStatus.PENDING, clientMapper.mapToEntity(choosedClient));
         Project project = this.service.create(projectRequest);
 
-        // Material
+        // Material need to do inject it latter
         MaterialUI materialUI = new MaterialUI();
-        MaterialRequest materialRequest = materialUI.display(project);
-        this.materialService.create(materialRequest);
+        List<MaterialRequest> materialRequests = materialUI.display(project);
 
-        // Workforce
+        // Workforce need to do inject it latter
         WorkforceUI workforceUI = new WorkforceUI();
-        WorkforceRequest workforceRequest = workforceUI.displayWorkforce(project);
-        this.workforceService.create(workforceRequest);
+        List<WorkforceRequest> workforceRequests = workforceUI.displayWorkforce(project);
+
+        title(" ---- Total cost calculation ---- ");
+
+        if (scanBoolean("Do you wish to apply a profit margin to the project ? (yes/no): ")) {
+            final double profitMargin = scanDouble("Enter profit margin percentage %: ", POSITIVE_DOUBLE);
+        }
+        project.setProfitMargin(12.2);
+        project.setTotalCost(12.2);
+
+        System.out.println(this.service.update(project.id() , project));
+        materialRequests.forEach(this.materialService::create);
+        workforceRequests.forEach(this.workforceService::create);
+        printProjectDetails(this.service.findById(project.id()));
+
+    }
 
 
-        System.out.println("here" + this.service.findById(project.id()));
+    public void printProjectDetails ( Project project ) {
 
-
+        System.out.println("project with name" + project.name() + "and surface " + project.surface());
+        System.out.println("created successfully");
+        showClientTable(List.of(clientMapper.mapToDto(project.client())));
+        System.out.println("workforce list : ");
+        showWorkforceTable(project.workforces());
+        System.out.println("materials list : ");
+        showMaterialTable(project.materials());
     }
 
 
