@@ -10,9 +10,9 @@ import org.example.services.interfaces.MaterialService;
 public class MaterialServiceImpl implements MaterialService {
 
     private final MaterialRepository repository;
-    private final  EntityDtoMapper<Material , MaterialRequest , MaterialResponse>  mapper;
+    private final EntityDtoMapper<Material, MaterialRequest, MaterialResponse> mapper;
 
-    public MaterialServiceImpl(MaterialRepository repository ,  EntityDtoMapper<Material , MaterialRequest , MaterialResponse> mapper) {
+    public MaterialServiceImpl ( MaterialRepository repository, EntityDtoMapper<Material, MaterialRequest, MaterialResponse> mapper ) {
         this.repository = repository;
         this.mapper = mapper;
     }

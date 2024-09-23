@@ -2,6 +2,7 @@ package org.example.mappers.rowmapper;
 
 import org.example.entities.Project;
 import org.example.entities.Workforce;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -34,11 +35,11 @@ public class WorkforceRowMapper implements EntityRowMapper<Workforce> {
     @Override
     public void map ( Workforce workforce, PreparedStatement stmt ) throws SQLException {
         int counter = 1;
-        stmt.setString(counter++ , workforce.name());
-        stmt.setDouble(counter++ , workforce.tva());
-        stmt.setDouble(counter++ , workforce.pricePerHour());
-        stmt.setDouble(counter++ , workforce.workingHours());
-        stmt.setDouble(counter++ , workforce.productivityFactor());
-        stmt.setObject(counter++ , workforce.project().id());
+        stmt.setString(counter++, workforce.name());
+        stmt.setDouble(counter++, workforce.tva());
+        stmt.setDouble(counter++, workforce.pricePerHour());
+        stmt.setDouble(counter++, workforce.workingHours());
+        stmt.setDouble(counter++, workforce.productivityFactor());
+        stmt.setObject(counter++, workforce.project().id());
     }
 }

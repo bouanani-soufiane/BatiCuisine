@@ -11,7 +11,8 @@ public class WorkforceServiceImpl implements WorkforceService {
 
     private final WorkforceRepository repository;
     private final EntityDtoMapper<Workforce, WorkforceRequest, WorkforceResponse> mapper;
-    public WorkforceServiceImpl(WorkforceRepository repository, EntityDtoMapper<Workforce, WorkforceRequest, WorkforceResponse> mapper) {
+
+    public WorkforceServiceImpl ( WorkforceRepository repository, EntityDtoMapper<Workforce, WorkforceRequest, WorkforceResponse> mapper ) {
         this.repository = repository;
         this.mapper = mapper;
     }

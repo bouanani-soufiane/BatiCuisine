@@ -10,27 +10,19 @@ import java.util.UUID;
 
 import static org.example.utils.persistence.QueryExecutor.executeQuery;
 
-public class MaterialRepositoryImpl extends BaseRepositoryImpl<Material , UUID>  implements MaterialRepository {
+public class MaterialRepositoryImpl extends BaseRepositoryImpl<Material, UUID> implements MaterialRepository {
 
-    public MaterialRepositoryImpl (  EntityRowMapper<Material> entityRowMapper ) {
+    public MaterialRepositoryImpl ( EntityRowMapper<Material> entityRowMapper ) {
         super("materials", entityRowMapper);
     }
 
     @Override
     public Material create ( Material material ) {
-        String query = "WITH inserted_material AS ( " +
-                "    INSERT INTO materials (name, quantity, unit_price, tva, transport_cost, coefficient, project_id) " +
-                "    VALUES (?, ?, ?, ?, ?, ?, ?) " +
-                "    RETURNING * " +
-                ") " +
-                "SELECT im.*, p.*, c.* " +
-                "FROM inserted_material im " +
-                "JOIN projects p ON im.project_id = p.id " +
-                "JOIN clients c ON p.client_id = c.id";
+        String query = "WITH inserted_material AS ( " + "    INSERT INTO materials (name, quantity, unit_price, tva, transport_cost, coefficient, project_id) " + "    VALUES (?, ?, ?, ?, ?, ?, ?) " + "    RETURNING * " + ") " + "SELECT im.*, p.*, c.* " + "FROM inserted_material im " + "JOIN projects p ON im.project_id = p.id " + "JOIN clients c ON p.client_id = c.id";
 
 
         return executeQuery(query, stmt -> {
-            entityRowMapper.map(material,stmt);
+            entityRowMapper.map(material, stmt);
             try (ResultSet resultSet = stmt.executeQuery()) {
                 return resultSet.next() ? entityRowMapper.map(resultSet) : null;
             }

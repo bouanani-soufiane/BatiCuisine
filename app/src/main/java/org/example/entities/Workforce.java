@@ -53,5 +53,15 @@ public class Workforce extends Component{
         return this;
     }
 
-
+    @Override
+    public String toString () {
+        return "Workforce{" +
+                "pricePerHour=" + pricePerHour +
+                ", workingHours=" + workingHours +
+                ", productivityFactor=" + productivityFactor +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", deletedAt=" + deletedAt +
+                '}';
+    }
 }
