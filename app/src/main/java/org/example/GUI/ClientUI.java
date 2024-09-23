@@ -58,7 +58,7 @@ public class ClientUI {
         final String name = scanString("please enter client name  : ", NOT_BLANK);
         try {
             Optional<List<ClientResponse>> clientResponse = service.findByName(name);
-            showTable(clientResponse.get());
+            showClientTable(clientResponse.get());
             return clientResponse;
         } catch (ClientNotFoundException e) {
             System.out.println("Client with name " + name + " not found");
@@ -69,7 +69,7 @@ public class ClientUI {
     private void update () {
         secondaryTitle("here is all client to update : ");
         final List<ClientResponse> clients = service.findAll();
-        this.showTable(clients);
+        this.showClientTable(clients);
         final String clientId = scanString("pealse entre client id to update : ", NOT_BLANK);
         ClientResponse choosedClient = clients.stream().filter(c -> c.id().toString().equals(clientId)).findFirst().orElse(null);
         if (choosedClient != null) {
@@ -82,7 +82,7 @@ public class ClientUI {
 
             try {
                 Client updatedClient = service.update(UUID.fromString(clientId), client);
-                showTable(List.of(mapper.mapToDto(updatedClient)));
+                showClientTable(List.of(mapper.mapToDto(updatedClient)));
 
             } catch (RuntimeException e) {
                 System.out.println("Client with id " + clientId + " was not updated");
@@ -106,7 +106,7 @@ public class ClientUI {
         try {
             Client client = this.service.create(clientRequest);
             secondaryTitle("Client created successfully ✨ ");
-            showTable(List.of(mapper.mapToDto(client)));
+            showClientTable(List.of(mapper.mapToDto(client)));
             return mapper.mapToDto(client);
         } catch (RuntimeException e) {
             System.out.println("Cannot create client: " + e.getMessage());
@@ -118,7 +118,7 @@ public class ClientUI {
 
     public void findAll () {
         final List<ClientResponse> clients = service.findAll();
-        showTable(clients);
+        showClientTable(clients);
     }
 
 
@@ -172,7 +172,7 @@ public class ClientUI {
             Optional<List<ClientResponse>> clients = this.service.findByName(name);
             if (clients.isPresent()) {
                 System.out.println("here's the  list of client with (" + name.toUpperCase() + ") as client name : ");
-                showTable(clients.get());
+                showClientTable(clients.get());
                 final int selectedClientChoice = scanInt("Please to enter client choice:  ", combine(POSITIVE_INT, ( n ) -> n <= clients.get().size()));
                 return clients.get().stream().skip(selectedClientChoice - 1).findFirst();
             } else {
@@ -184,7 +184,7 @@ public class ClientUI {
         }
     }
 
-    public static void showTable ( List<ClientResponse> clients ) {
+    public static void showClientTable ( List<ClientResponse> clients ) {
 
         System.out.println(AsciiTable.getTable(AsciiTable.BASIC_ASCII_NO_DATA_SEPARATORS, clients, Arrays.asList(new Column().header("#").headerAlign(CENTER).with(client -> Integer.toString(clients.indexOf(client) + 1)), new Column().header("ID").headerAlign(CENTER).with(client -> String.valueOf(client.id())), new Column().header("Name").headerAlign(CENTER).dataAlign(LEFT).with(ClientResponse::name), new Column().header("Phone").headerAlign(RIGHT).dataAlign(CENTER).with(ClientResponse::phone), new Column().header("Address").headerAlign(LEFT).dataAlign(LEFT).with(ClientResponse::address), new Column().header("Is Professional").headerAlign(CENTER).dataAlign(CENTER).with(client -> client.isProfessional() ? "Yes" : "No"))));
 

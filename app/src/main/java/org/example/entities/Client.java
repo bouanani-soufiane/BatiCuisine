@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Client extends AbstractEntity{
+
     private UUID id;
     private String name;
     private String address;

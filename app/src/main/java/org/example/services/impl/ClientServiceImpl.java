@@ -7,6 +7,7 @@ import org.example.exceptions.ClientNotFoundException;
 import org.example.mappers.dtomapper.ClientDtoMapper;
 import org.example.reposiroties.impl.ClientRepositoryImpl;
 import org.example.services.interfaces.ClientService;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -16,7 +17,8 @@ public class ClientServiceImpl implements ClientService {
 
     private final ClientRepositoryImpl repository;
     private final ClientDtoMapper mapper;
-    public ClientServiceImpl(ClientRepositoryImpl repository , ClientDtoMapper mapper ) {
+
+    public ClientServiceImpl ( ClientRepositoryImpl repository, ClientDtoMapper mapper ) {
         this.repository = repository;
         this.mapper = mapper;
     }
@@ -40,16 +42,13 @@ public class ClientServiceImpl implements ClientService {
     }
 
     @Override
-    public Optional<List<ClientResponse>> findByName(String value) throws ClientNotFoundException {
-        List<Client> clients = repository.getByName(value)
-                .orElseThrow(() -> new ClientNotFoundException("Client " + value + " was not found"));
+    public Optional<List<ClientResponse>> findByName ( String value ) throws ClientNotFoundException {
+        List<Client> clients = repository.getByName(value).orElseThrow(() -> new ClientNotFoundException("Client " + value + " was not found"));
 
-        List<ClientResponse> clientResponses = clients.stream()
-                .map(mapper::mapToDto).toList();
+        List<ClientResponse> clientResponses = clients.stream().map(mapper::mapToDto).toList();
 
         return Optional.of(clientResponses);
     }
-
 
 
 }
