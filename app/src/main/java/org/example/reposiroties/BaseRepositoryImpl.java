@@ -86,16 +86,17 @@ public abstract class BaseRepositoryImpl<Entity, ID> implements BaseRepository<E
     @Override
 
     public boolean existsByColumn ( final String columnName, final String value ) {
-            final String query = "SELECT 1 FROM " + this._tableName + " WHERE " + columnName + " = ?";
-        return executeQuery(query , stmt -> {
+        final String query = "SELECT 1 FROM " + this._tableName + " WHERE " + columnName + " = ?";
+        return executeQuery(query, stmt -> {
             stmt.setObject(1, value);
             try (ResultSet resultSet = stmt.executeQuery()) {
                 return resultSet.next();
             }
         });
     }
+
     @Override
-    public boolean delete(ID id) {
+    public boolean delete ( ID id ) {
         String query = "DELETE FROM " + _tableName + " WHERE id = ?";
         return executeQuery(query, stmt -> {
             stmt.setObject(1, id);

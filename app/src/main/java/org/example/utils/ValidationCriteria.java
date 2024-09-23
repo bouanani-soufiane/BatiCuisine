@@ -22,7 +22,7 @@ public class ValidationCriteria {
     public static final Predicate<String> VALID_PHONE = phone -> PHONE_PATTERN.matcher(phone).matches();
 
     @SafeVarargs
-    public static <T> Predicate<T> combine(Predicate<T>... strategies) {
+    public static <T> Predicate<T> combine ( Predicate<T>... strategies ) {
         return input -> {
             for (Predicate<T> strategy : strategies) {
                 if (!strategy.test(input)) return false;

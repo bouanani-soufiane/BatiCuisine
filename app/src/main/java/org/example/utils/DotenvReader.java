@@ -13,7 +13,7 @@ import java.util.Map;
 public class DotenvReader {
     private static final Map<String, String> envVariables = new HashMap<>();
 
-    private DotenvReader() {
+    private DotenvReader () {
     }
 
     static {
@@ -48,7 +48,7 @@ public class DotenvReader {
      * @param key The key of the environment variable.
      * @return The value of the environment variable, or null if not found.
      */
-    public static String get(String key) {
+    public static String get ( String key ) {
         return envVariables.get(key);
     }
 }
