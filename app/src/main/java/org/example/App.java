@@ -12,7 +12,6 @@ public class App {
         MainGUI mainGUI = new MainGUI(scanner);
         mainGUI.menu();
 
-
     }
 
 
