@@ -24,9 +24,6 @@ public class WorkforceUI {
 
         List<WorkforceRequest> workforceRequests = new ArrayList<>();
 
-        if (!scanBoolean("Do you want to add a workforce? (yes/no): ")) {
-            return workforceRequests;
-        }
         do {
 
             title("Add New Workforce");

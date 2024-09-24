@@ -7,6 +7,8 @@ import org.example.mappers.dtomapper.EntityDtoMapper;
 import org.example.reposiroties.interfaces.WorkforceRepository;
 import org.example.services.interfaces.WorkforceService;
 
+import java.util.List;
+
 public class WorkforceServiceImpl implements WorkforceService {
 
     private final WorkforceRepository repository;
@@ -18,7 +20,10 @@ public class WorkforceServiceImpl implements WorkforceService {
     }
 
     @Override
-    public Workforce create ( WorkforceRequest workforceRequest ) {
-        return this.repository.create(mapper.mapToEntity(workforceRequest));
+    public List<Workforce> create ( List<WorkforceRequest> workforceRequests ) {
+        return workforceRequests.stream()
+                .map(mapper::mapToEntity)
+                .map(repository::create)
+                .toList();
     }
 }

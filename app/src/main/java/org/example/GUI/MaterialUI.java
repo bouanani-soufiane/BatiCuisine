@@ -21,10 +21,6 @@ public class MaterialUI {
     public List<MaterialRequest> display ( Project project ) {
         List<MaterialRequest> materials = new ArrayList<>();
 
-        if (!scanBoolean("Do you want to add a material? (yes/no): ")) {
-            return materials;
-        }
-
         title("Add New Material");
 
         boolean addingMore = true;

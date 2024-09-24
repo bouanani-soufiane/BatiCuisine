@@ -1,7 +1,9 @@
 package org.example.mappers.dtomapper;
 
+import org.example.dtos.requests.MaterialRequest;
 import org.example.dtos.requests.WorkforceRequest;
 import org.example.dtos.responses.WorkforceResponse;
+import org.example.entities.Material;
 import org.example.entities.Workforce;
 
 public class WorkforceDtoMapper implements EntityDtoMapper<Workforce, WorkforceRequest, WorkforceResponse> {
@@ -14,5 +16,10 @@ public class WorkforceDtoMapper implements EntityDtoMapper<Workforce, WorkforceR
     @Override
     public WorkforceResponse mapToDto ( Workforce workforce ) {
         return new WorkforceResponse(workforce.id(), workforce.name(), workforce.tva(), workforce.pricePerHour(), workforce.workingHours(), workforce.productivityFactor(), workforce.project(), workforce.createdAt(), workforce.updatedAt());
+    }
+
+    public WorkforceRequest mapToEntity ( Workforce dto ) {
+        return new WorkforceRequest(dto.name() , dto.tva()  , dto.pricePerHour() ,dto.workingHours() , dto.productivityFactor() ,dto.project() );
+
     }
 }

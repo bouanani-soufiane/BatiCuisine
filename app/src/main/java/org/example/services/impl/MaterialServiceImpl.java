@@ -7,6 +7,8 @@ import org.example.mappers.dtomapper.EntityDtoMapper;
 import org.example.reposiroties.interfaces.MaterialRepository;
 import org.example.services.interfaces.MaterialService;
 
+import java.util.List;
+
 public class MaterialServiceImpl implements MaterialService {
 
     private final MaterialRepository repository;
@@ -19,7 +21,12 @@ public class MaterialServiceImpl implements MaterialService {
 
 
     @Override
-    public Material create ( MaterialRequest material ) {
-        return repository.create(mapper.mapToEntity(material));
+    public List<Material> create( List<MaterialRequest> materials) {
+        return materials.stream()
+                .map(mapper::mapToEntity)
+                .map(repository::create)
+                .toList();
     }
+
+
 }

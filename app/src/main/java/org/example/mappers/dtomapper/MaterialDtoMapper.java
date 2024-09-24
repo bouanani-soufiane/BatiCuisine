@@ -15,4 +15,9 @@ public class MaterialDtoMapper implements EntityDtoMapper<Material, MaterialRequ
     public MaterialResponse mapToDto ( Material material ) {
         return new MaterialResponse(material.id(), material.name(), material.tva(), material.quantity(), material.unitPrice(), material.transportCost(), material.coefficient(), material.project(), material.createdAt(), material.updatedAt());
     }
+
+    public MaterialRequest mapToEntity ( Material dto ) {
+        return new MaterialRequest(dto.name() , dto.tva()  , dto.quantity() ,dto.unitPrice() , dto.transportCost() , dto.coefficient() , dto.project());
+
+    }
 }
