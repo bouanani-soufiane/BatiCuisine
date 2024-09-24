@@ -5,11 +5,13 @@ import org.example.dtos.requests.MaterialRequest;
 import org.example.dtos.requests.WorkforceRequest;
 import org.example.dtos.responses.EstimateResponse;
 import org.example.entities.Estimate;
+import org.example.exceptions.EstimateNotFoundException;
 import org.example.mappers.dtomapper.EntityDtoMapper;
 import org.example.reposiroties.interfaces.EstimateRepository;
 import org.example.services.interfaces.EstimateService;
 
 import java.util.List;
+import java.util.UUID;
 
 public class EstimateServiceImpl implements EstimateService {
 
@@ -20,6 +22,7 @@ public class EstimateServiceImpl implements EstimateService {
         this.repository = repository;
         this.estimateDtoMapper = estimateDtoMapper;
     }
+
 
     @Override
     public Estimate create ( EstimateRequest estimateRequest ) {
@@ -79,11 +82,20 @@ public class EstimateServiceImpl implements EstimateService {
     }
 
     @Override
-    public Double calcTotalCost ( List<MaterialRequest> materials, List<WorkforceRequest> workforces, Double profitMargin ) {
-        return (this.calcCostMaterialsWithTva(materials) + this.calcCostWorkforcesWithTva(workforces)) + this.calcProfitMargin(materials, workforces, profitMargin);
+    public Estimate getEstimateById ( UUID id ) {
+        return this.repository.findById(id).orElseThrow(() -> new EstimateNotFoundException(id));
+    }
+
+    @Override
+    public List<Estimate> getAllEstimates () {
+        return this.repository.findAll();
     }
 
 
+    @Override
+    public Double calcTotalCost ( List<MaterialRequest> materials, List<WorkforceRequest> workforces, Double profitMargin ) {
+        return (this.calcCostMaterialsWithTva(materials) + this.calcCostWorkforcesWithTva(workforces)) + this.calcProfitMargin(materials, workforces, profitMargin);
+    }
 
 
 }

@@ -1,7 +1,6 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 CREATE TYPE project_status AS ENUM ('PENDING', 'DONE', 'CANCELLED');
-create type component_type as ENUM ('MATERIAL','WORKER');
 
 CREATE TABLE clients (
                         id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -21,7 +20,6 @@ CREATE TABLE projects (
                           project_status project_status NOT NULL,
                           total_cost DOUBLE PRECISION,
                           profit_margin DOUBLE PRECISION,
-                          tva DOUBLE PRECISION NOT NULL,
                           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                           deleted_at TIMESTAMP,
@@ -84,3 +82,39 @@ VALUES ('Site Supervisor', 'WORKER', 'a08e8dab-850c-4655-bf30-7c51820d2b4d', 50.
 
 INSERT INTO projects (name, surface, project_status,  client_id)
 VALUES ('here Project', 150.0, 'DONE',  'a08e8dab-850c-4655-bf30-7c51820d2b4d');
+
+
+
+
+
+
+
+
+
+SELECT p.*, c.*, com.*, mat.quantity AS material_quantity, mat.unit_price AS material_unit_price, mat.transport_cost AS material_transport_cost, mat.coefficient AS material_coefficient, wf.price_per_hour AS workforce_price_per_hour, wf.working_hours AS workforce_working_hours, wf.productivity_factor AS workforce_productivity_factor FROM projects p LEFT JOIN clients c ON p.client_id = c.id LEFT JOIN components com ON com.project_id = p.id LEFT JOIN materials mat ON mat.id = com.id LEFT JOIN workforces wf ON wf.id = com.id GROUP BY p.id, c.id, com.id, mat.quantity, mat.unit_price, mat.transport_cost, mat.coefficient, wf.price_per_hour, wf.working_hours, wf.productivity_factor
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

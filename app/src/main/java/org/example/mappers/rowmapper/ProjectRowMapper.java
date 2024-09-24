@@ -29,6 +29,8 @@ public class ProjectRowMapper implements EntityRowMapper<Project>, ProjectAllRow
         project.setId(UUID.fromString(resultSet.getString("id")));
         project.setName(resultSet.getString("name"));
         project.setSurface(resultSet.getDouble("surface"));
+        project.setTotalCost(resultSet.getDouble("total_cost"));
+        project.setProfitMargin(resultSet.getDouble("profit_margin"));
         project.setProjectStatus(ProjectStatus.valueOf(resultSet.getString("project_status")));
         project.setClient(clientRowMapper.map(resultSet));
 
@@ -93,19 +95,12 @@ public class ProjectRowMapper implements EntityRowMapper<Project>, ProjectAllRow
     }
 
     private boolean isMaterialRowValid ( ResultSet resultSet ) throws SQLException {
-        return resultSet.getString(20) != null &&
-                resultSet.getDouble(26) > 0 &&
-                resultSet.getDouble(27) > 0 &&
-                resultSet.getDouble(28) > 0 &&
-                resultSet.getDouble(29) > 0;
+        return resultSet.getString(20) != null && resultSet.getDouble(26) > 0 && resultSet.getDouble(27) > 0 && resultSet.getDouble(28) > 0 && resultSet.getDouble(29) > 0;
     }
 
 
     private boolean isWorkforceRowValid ( ResultSet resultSet ) throws SQLException {
-        return resultSet.getString(20) != null &&
-                resultSet.getDouble(30) > 0 &&
-                resultSet.getDouble(31) > 0 &&
-                resultSet.getDouble(32) > 0;
+        return resultSet.getString(20) != null && resultSet.getDouble(30) > 0 && resultSet.getDouble(31) > 0 && resultSet.getDouble(32) > 0;
     }
 
 

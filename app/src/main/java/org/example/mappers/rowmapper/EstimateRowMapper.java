@@ -2,6 +2,7 @@ package org.example.mappers.rowmapper;
 
 import org.example.entities.Estimate;
 import org.example.entities.Project;
+import org.example.enums.ProjectStatus;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,7 +27,15 @@ public class EstimateRowMapper implements EntityRowMapper<Estimate> {
         estimate.setValidUntilDate(resultSet.getTimestamp("valid_until_date").toLocalDateTime());
         estimate.setAccepted(resultSet.getBoolean("is_accepted"));
         estimate.setEstimateAmount(resultSet.getDouble("estimate_amount"));
-        estimate.setProject(projectRowMapper.map(resultSet));
+
+        Project project = new Project();
+        project.setId((UUID) resultSet.getObject("project_id"));
+        project.setName(resultSet.getString("name"));
+        project.setSurface(resultSet.getDouble("surface"));
+        project.setProjectStatus(ProjectStatus.valueOf(resultSet.getString("project_status")));
+        project.setProfitMargin(resultSet.getDouble("profit_margin"));
+
+        estimate.setProject(project);
 
         return estimate;
     }

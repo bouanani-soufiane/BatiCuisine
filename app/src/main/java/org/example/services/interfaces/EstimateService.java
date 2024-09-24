@@ -6,30 +6,36 @@ import org.example.dtos.requests.WorkforceRequest;
 import org.example.entities.Estimate;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface EstimateService {
 
-    Estimate create(EstimateRequest estimateRequest);
+    Estimate create ( EstimateRequest estimateRequest );
 
-    Double calcCostMaterial(MaterialRequest material);
+    Double calcCostMaterial ( MaterialRequest material );
 
-    Double calcCostMaterialWithTva(MaterialRequest material);
+    Double calcCostMaterialWithTva ( MaterialRequest material );
 
-    Double calcCostWorkforce(WorkforceRequest workforce);
+    Double calcCostWorkforce ( WorkforceRequest workforce );
 
-    Double calcCostWorkforceWithTva(WorkforceRequest workforce);
+    Double calcCostWorkforceWithTva ( WorkforceRequest workforce );
 
-    Double calcCostMaterials(List<MaterialRequest> materials);
+    Double calcCostMaterials ( List<MaterialRequest> materials );
 
-    Double calcCostMaterialsWithTva(List<MaterialRequest> materials);
+    Double calcCostMaterialsWithTva ( List<MaterialRequest> materials );
 
-    Double calcCostWorkforces(List<WorkforceRequest> workforces);
+    Double calcCostWorkforces ( List<WorkforceRequest> workforces );
 
-    Double calcCostWorkforcesWithTva(List<WorkforceRequest> workforces);
+    Double calcCostWorkforcesWithTva ( List<WorkforceRequest> workforces );
 
-    Double calcProfitMargin(List<MaterialRequest> materials, List<WorkforceRequest> workforces, Double profitMargin);
+    Double calcProfitMargin ( List<MaterialRequest> materials, List<WorkforceRequest> workforces, Double profitMargin );
 
-    Double calcTotalCost(List<MaterialRequest> materials, List<WorkforceRequest> workforces, Double profitMargin);
+    Double calcTotalCost ( List<MaterialRequest> materials, List<WorkforceRequest> workforces, Double profitMargin );
 
-    Double calcTotalCost(List<MaterialRequest> materials, List<WorkforceRequest> workforces);
+    Double calcTotalCost ( List<MaterialRequest> materials, List<WorkforceRequest> workforces );
+
+
+    Estimate getEstimateById ( UUID id );
+
+    List<Estimate> getAllEstimates ();
 }

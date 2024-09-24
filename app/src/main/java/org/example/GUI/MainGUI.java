@@ -21,14 +21,16 @@ import org.example.services.impl.*;
 import org.example.services.interfaces.*;
 
 import java.util.Scanner;
+
 import static org.example.utils.Print.title;
 import static org.example.utils.ValidatedInputReader.scanInt;
-import static org.example.utils.ValidationCriteria.*;
+import static org.example.utils.ValidationCriteria.POSITIVE_INT;
 
 public class MainGUI {
 
     private final ClientUI clientUI;
     private final ProjectUI projectUI;
+    private final EstimateUI estimateUI;
     private final ClientService clientService;
     private final ClientDtoMapper clientDtoMapper;
     private final ProjectService projectService;
@@ -36,7 +38,8 @@ public class MainGUI {
     private final WorkforceService workforceService;
     private final EstimateService estimateService;
 
-    public MainGUI(Scanner scanner) {
+
+    public MainGUI ( Scanner scanner ) {
         ClientRowMapper clientRowMapper = new ClientRowMapper();
         this.clientDtoMapper = new ClientDtoMapper();
         ClientRepositoryImpl clientRepository = new ClientRepositoryImpl(clientRowMapper);
@@ -65,7 +68,10 @@ public class MainGUI {
         this.estimateService = new EstimateServiceImpl(estimateRepository, estimateDtoMapper);
         WorkforceDtoMapper workforceDtoMappers = new WorkforceDtoMapper();
 
-        this.projectUI = new ProjectUI(projectService, clientUI, clientDtoMapper, this, materialService, workforceService,estimateService,materialDtoMapper,workforceDtoMappers );
+        this.projectUI = new ProjectUI(projectService, clientUI, clientDtoMapper, this, materialService, workforceService, estimateService, materialDtoMapper, workforceDtoMappers);
+
+        EstimateService estimateService = new EstimateServiceImpl(estimateRepository, estimateDtoMapper);
+        this.estimateUI = new EstimateUI(projectService, projectUI, this, estimateService);
     }
 
     public void menu () {
@@ -80,7 +86,7 @@ public class MainGUI {
         switch (userChoice) {
             case 1 -> clientUI.showMenu();
             case 2 -> projectUI.showMenu();
-            case 3 -> System.out.println("Quotation management");
+            case 3 -> estimateUI.showMenu();
             case 4 -> {
                 System.out.println("Good bye");
                 System.exit(0);

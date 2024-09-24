@@ -71,15 +71,13 @@ public class ProjectRepositoryImpl extends BaseRepositoryImpl<Project, UUID> imp
 
     @Override
     public List<Project> findAll () {
-        final String query = "SELECT * FROM projects ;" ;
+        String query = "SELECT * FROM projects INNER JOIN clients ON projects.client_id = clients.id;";
 
         return executeQuery(query, stmt -> {
             List<Project> entities = new ArrayList<>();
             try (ResultSet resultSet = stmt.executeQuery()) {
                 while (resultSet.next()) {
-                    ProjectAllRowsMapper projectAllRowsMapper = (ProjectAllRowsMapper) entityRowMapper;
-                    Project project = projectAllRowsMapper.mapWithRelations(resultSet);
-                    entities.add(project);
+                    entities.add(entityRowMapper.map(resultSet));
                 }
             }
             return entities;
