@@ -1,29 +1,25 @@
 package org.example.GUI;
 
+import org.example.dtos.requests.EstimateRequest;
 import org.example.dtos.requests.ProjectRequest;
 import org.example.dtos.requests.WorkforceRequest;
+import org.example.dtos.responses.EstimateResponse;
 import org.example.dtos.responses.ProjectResponse;
 import org.example.dtos.responses.WorkforceResponse;
+import org.example.entities.Estimate;
 import org.example.entities.Material;
 import org.example.entities.Project;
 import org.example.entities.Workforce;
 import org.example.mappers.dtomapper.*;
 import org.example.mappers.rowmapper.*;
-import org.example.reposiroties.impl.ClientRepositoryImpl;
-import org.example.reposiroties.impl.MaterialRepositoryImpl;
-import org.example.reposiroties.impl.ProjectRepositoryImpl;
-import org.example.reposiroties.impl.WorkforceRepositoryImpl;
+import org.example.reposiroties.impl.*;
+import org.example.reposiroties.interfaces.EstimateRepository;
 import org.example.reposiroties.interfaces.MaterialRepository;
 import org.example.reposiroties.interfaces.ProjectRepository;
 import org.example.reposiroties.interfaces.WorkforceRepository;
-import org.example.services.impl.ClientServiceImpl;
-import org.example.services.impl.MaterialServiceImpl;
-import org.example.services.impl.ProjectServiceImpl;
-import org.example.services.impl.WorkforceServiceImpl;
-import org.example.services.interfaces.ClientService;
-import org.example.services.interfaces.MaterialService;
-import org.example.services.interfaces.ProjectService;
-import org.example.services.interfaces.WorkforceService;
+import org.example.services.impl.*;
+import org.example.services.interfaces.*;
+
 import java.util.Scanner;
 import static org.example.utils.Print.title;
 import static org.example.utils.ValidatedInputReader.scanInt;
@@ -38,6 +34,7 @@ public class MainGUI {
     private final ProjectService projectService;
     private final MaterialService materialService;
     private final WorkforceService workforceService;
+    private final EstimateService estimateService;
 
     public MainGUI(Scanner scanner) {
         ClientRowMapper clientRowMapper = new ClientRowMapper();
@@ -62,7 +59,13 @@ public class MainGUI {
         EntityDtoMapper<Workforce, WorkforceRequest, WorkforceResponse> workforceDtoMapper = new WorkforceDtoMapper();
         this.workforceService = new WorkforceServiceImpl(workforceRepository, workforceDtoMapper);
 
-        this.projectUI = new ProjectUI(projectService, clientUI, clientDtoMapper, this, materialService, workforceService);
+        EntityDtoMapper<Estimate, EstimateRequest, EstimateResponse> estimateDtoMapper = new EstimateDtoMapper();
+        EntityRowMapper<Estimate> estimateRowMapper = new EstimateRowMapper(projectRowMapper);
+        EstimateRepository estimateRepository = new EstimateRepositoryImpl(estimateRowMapper);
+        this.estimateService = new EstimateServiceImpl(estimateRepository, estimateDtoMapper);
+        WorkforceDtoMapper workforceDtoMappers = new WorkforceDtoMapper();
+
+        this.projectUI = new ProjectUI(projectService, clientUI, clientDtoMapper, this, materialService, workforceService,estimateService,materialDtoMapper,workforceDtoMappers );
     }
 
     public void menu () {

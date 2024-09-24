@@ -9,19 +9,22 @@ public class Estimate extends AbstractEntity {
     private LocalDateTime validUntilDate;
     private Boolean isAccepted;
     private Double estimateAmount;
+    private Project project;
+
 
     public Estimate () {
     }
 
-    public Estimate (  LocalDateTime issuedDate, LocalDateTime validUntilDate , Boolean isAccepted , Double estimateAmount ) {
+    public Estimate (  LocalDateTime issuedDate, LocalDateTime validUntilDate , Boolean isAccepted , Double estimateAmount,Project project ) {
         this.issuedDate = issuedDate;
         this.validUntilDate = validUntilDate;
         this.isAccepted = isAccepted;
         this.estimateAmount = estimateAmount;
+        this.project = project;
     }
 
-    public Estimate (  LocalDateTime issuedDate, LocalDateTime validUntilDate ,Boolean isAccepted , Double estimateAmount , LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
-        this(issuedDate, validUntilDate , isAccepted , estimateAmount );
+    public Estimate (  LocalDateTime issuedDate, LocalDateTime validUntilDate ,Boolean isAccepted , Double estimateAmount ,Project project , LocalDateTime createdAt, LocalDateTime updatedAt, LocalDateTime deletedAt) {
+        this(issuedDate, validUntilDate , isAccepted , estimateAmount ,  project);
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.deletedAt = deletedAt;
@@ -70,6 +73,15 @@ public class Estimate extends AbstractEntity {
 
     public Estimate setEstimateAmount ( Double estimateAmount ) {
         this.estimateAmount = estimateAmount;
+        return this;
+    }
+
+    public Project project () {
+        return project;
+    }
+
+    public Estimate setProject ( Project project ) {
+        this.project = project;
         return this;
     }
 }

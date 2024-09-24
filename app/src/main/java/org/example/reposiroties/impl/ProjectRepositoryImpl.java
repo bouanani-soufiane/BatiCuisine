@@ -8,6 +8,8 @@ import org.example.reposiroties.BaseRepositoryImpl;
 import org.example.reposiroties.interfaces.ProjectRepository;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -65,6 +67,24 @@ public class ProjectRepositoryImpl extends BaseRepositoryImpl<Project, UUID> imp
         });
 
         return findById(id).orElseThrow(() -> new ProjectNotFound(id));
+    }
+
+    @Override
+    public List<Project> findAll () {
+        final String query = "SELECT * FROM projects ;" ;
+
+        return executeQuery(query, stmt -> {
+            List<Project> entities = new ArrayList<>();
+            try (ResultSet resultSet = stmt.executeQuery()) {
+                while (resultSet.next()) {
+                    ProjectAllRowsMapper projectAllRowsMapper = (ProjectAllRowsMapper) entityRowMapper;
+                    Project project = projectAllRowsMapper.mapWithRelations(resultSet);
+                    entities.add(project);
+                }
+            }
+            return entities;
+        });
+
     }
 
 }

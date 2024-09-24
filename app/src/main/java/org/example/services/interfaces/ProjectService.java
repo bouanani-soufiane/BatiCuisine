@@ -3,6 +3,7 @@ package org.example.services.interfaces;
 import org.example.dtos.requests.ProjectRequest;
 import org.example.entities.Project;
 
+import java.util.List;
 import java.util.UUID;
 
 public interface ProjectService {
@@ -11,5 +12,7 @@ public interface ProjectService {
     Project findById ( UUID id );
 
     Project update ( UUID id, Project project );
+
+    List<Project> findAll ();
 
 }

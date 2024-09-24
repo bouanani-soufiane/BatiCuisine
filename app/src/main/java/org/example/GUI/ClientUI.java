@@ -39,6 +39,7 @@ public class ClientUI {
             System.out.println("2. Show all clients");
             System.out.println("3. Update an existing client");
             System.out.println("4. Show client by name");
+            System.out.println("5. Return to main menu");
 
             userChoice = scanInt("Please to enter you choice: ", POSITIVE_INT);
 
@@ -47,6 +48,7 @@ public class ClientUI {
                 case 2 -> this.findAll();
                 case 3 -> this.update();
                 case 4 -> this.findByName();
+                case 5 -> mainGUI.menu();
 
                 default -> throw new IllegalArgumentException("Invalid choice");
             }
@@ -186,7 +188,7 @@ public class ClientUI {
 
     public static void showClientTable ( List<ClientResponse> clients ) {
 
-        System.out.println(AsciiTable.getTable(AsciiTable.BASIC_ASCII_NO_DATA_SEPARATORS, clients, Arrays.asList(new Column().header("#").headerAlign(CENTER).with(client -> Integer.toString(clients.indexOf(client) + 1)), new Column().header("ID").headerAlign(CENTER).with(client -> String.valueOf(client.id())), new Column().header("Name").headerAlign(CENTER).dataAlign(LEFT).with(ClientResponse::name), new Column().header("Phone").headerAlign(RIGHT).dataAlign(CENTER).with(ClientResponse::phone), new Column().header("Address").headerAlign(LEFT).dataAlign(LEFT).with(ClientResponse::address), new Column().header("Is Professional").headerAlign(CENTER).dataAlign(CENTER).with(client -> client.isProfessional() ? "Yes" : "No"))));
+        System.out.println(AsciiTable.getTable(AsciiTable.BASIC_ASCII_NO_DATA_SEPARATORS, clients, Arrays.asList(new Column().header("#").headerAlign(CENTER).with(client -> Integer.toString(clients.indexOf(client) + 1)), new Column().header("Name").headerAlign(CENTER).dataAlign(LEFT).with(ClientResponse::name), new Column().header("Phone").headerAlign(RIGHT).dataAlign(CENTER).with(ClientResponse::phone), new Column().header("Address").headerAlign(LEFT).dataAlign(LEFT).with(ClientResponse::address), new Column().header("Is Professional").headerAlign(CENTER).dataAlign(CENTER).with(client -> client.isProfessional() ? "Yes" : "No"))));
 
 
     }
